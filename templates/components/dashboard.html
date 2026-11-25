@@ -1,0 +1,2883 @@
+<div class="dashboard-layout">
+
+  <!-- =========================
+       LEFT SIDEBAR
+  ========================== -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-brand">
+      <a href="#home" class="brand-link btn-back-home" onclick="switchView('home'); return false;">
+        <i class="fa-solid fa-heart-pulse brand-icon"></i>
+        <span>Asclepius <span class="brand-accent">FairAI</span></span>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">MAIN NAVIGATION</div>
+      <a href="#dashboard" id="nav-dashboard" class="nav-item active" onclick="switchDashSection('dashboard'); return false;">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="#dataset" id="nav-dataset" class="nav-item" onclick="switchDashSection('dataset'); return false;">
+        <i class="fa-solid fa-database"></i>
+        <span>Dataset</span>
+      </a>
+      <a href="#model" id="nav-model" class="nav-item" onclick="switchDashSection('model'); return false;">
+        <i class="fa-solid fa-brain"></i>
+        <span>ML Model</span>
+      </a>
+      <a href="#external-audit" id="nav-external-audit" class="nav-item" onclick="switchDashSection('external-audit'); return false;">
+        <i class="fa-solid fa-stethoscope"></i>
+        <span>Model Audit</span>
+      </a>
+      <a href="#fairness" id="nav-fairness" class="nav-item" onclick="switchDashSection('fairness'); return false;">
+        <i class="fa-solid fa-scale-balanced"></i>
+        <span>Fairness Analysis</span>
+      </a>
+      <a href="#explain" id="nav-explain" class="nav-item" onclick="switchDashSection('explain'); return false;">
+        <i class="fa-solid fa-lightbulb"></i>
+        <span>Explainable AI</span>
+      </a>
+      <a href="#recommendations" id="nav-recommendations" class="nav-item" onclick="switchDashSection('recommendations'); return false;">
+        <i class="fa-solid fa-clipboard-check"></i>
+        <span>Recommendations</span>
+      </a>
+      <a href="#mitigation" id="nav-mitigation" class="nav-item" onclick="switchDashSection('mitigation'); return false;">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Mitigation</span>
+      </a>
+      <a href="#reports" id="nav-reports" class="nav-item" onclick="switchDashSection('reports'); return false;">
+        <i class="fa-solid fa-file-pdf"></i>
+        <span>Reports</span>
+      </a>
+      <a href="#history" id="nav-history" class="nav-item" onclick="switchDashSection('history'); return false;">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Analysis History</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="system-status">
+        <span class="status-pulse"></span>
+        <span id="sidebar-status-text">System Ready</span>
+      </div>
+      <a href="#home" class="back-home-link btn-back-home" onclick="switchView('home'); return false;">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Back to Landing Page</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- =========================
+       MAIN CONTENT CONTAINER
+  ========================== -->
+  <main class="dashboard-main">
+
+    <!-- ==========================================
+         SECTION 1: DASHBOARD OVERVIEW
+    =========================================== -->
+    <div id="section-dashboard" class="dash-section active-section">
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div>
+          <h1 class="header-title">FairAI Analysis Dashboard</h1>
+          <p class="header-subtitle">Evaluate healthcare AI models for performance, fairness and explainability.</p>
+        </div>
+        <div class="header-badge">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Clinical AI Standard</span>
+        </div>
+      </header>
+
+      <!-- Evaluation Mode Selector Banner -->
+      <section class="dash-card audit-mode-selector-card" style="margin-bottom: 24px; border: 1.5px solid #A7F3D0; background: linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%); padding: 18px 24px; border-radius: 12px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.05);">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+              <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #16A34A; background: #DCFCE7; padding: 4px 10px; border-radius: 4px; border: 1px solid #BBF7D0;">
+                <i class="fa-solid fa-sliders" style="margin-right: 4px;"></i> Evaluation Mode
+              </span>
+              <span id="current-mode-badge" style="font-size: 13px; font-weight: 700; color: #0F172A; display: inline-flex; align-items: center; gap: 6px;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: #16A34A; display: inline-block;"></span>
+                Active: Local Model Evaluation
+              </span>
+            </div>
+            <p id="current-mode-description" style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
+              Train and evaluate a model using a supported healthcare dataset.
+            </p>
+          </div>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button id="btn-mode-local" class="btn btn-primary" onclick="setAuditMode('internal');" style="box-shadow: none; font-size: 13px; padding: 8px 16px; border-radius: 8px;">
+              <i class="fa-solid fa-laptop-code"></i>
+              Local Model Evaluation
+            </button>
+            <button id="btn-mode-external" class="btn btn-secondary" onclick="setAuditMode('external');" style="box-shadow: none; font-size: 13px; padding: 8px 16px; border-radius: 8px;">
+              <i class="fa-solid fa-stethoscope"></i>
+              Existing AI Model Audit
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Top Summary Status Cards -->
+      <section class="summary-cards-grid">
+        <div class="dash-card status-card">
+          <div class="card-icon-wrap mint">
+            <i class="fa-solid fa-database"></i>
+          </div>
+          <div class="status-card-content">
+            <div class="status-label">Dataset Status</div>
+            <div class="status-value" id="dash-stat-dataset-val">No dataset</div>
+            <span class="status-pill pending" id="dash-stat-dataset-pill">Pending Upload</span>
+          </div>
+        </div>
+
+        <div class="dash-card status-card">
+          <div class="card-icon-wrap mint">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <div class="status-card-content">
+            <div class="status-label">Model Status</div>
+            <div class="status-value">Not Trained</div>
+            <span class="status-pill pending">Awaiting Data</span>
+          </div>
+        </div>
+
+        <div class="dash-card status-card">
+          <div class="card-icon-wrap mint">
+            <i class="fa-solid fa-scale-balanced"></i>
+          </div>
+          <div class="status-card-content">
+            <div class="status-label">Fairness Status</div>
+            <div class="status-value">Unevaluated</div>
+            <span class="status-pill pending">No Metrics</span>
+          </div>
+        </div>
+
+        <div class="dash-card status-card">
+          <div class="card-icon-wrap emerald">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div class="status-card-content">
+            <div class="status-label">Analysis Status</div>
+            <div class="status-value">Ready</div>
+            <span class="status-pill ready">Ready to Start</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Welcome / Action Area -->
+      <section class="dash-card welcome-action-card">
+        <div class="welcome-content">
+          <div class="action-tag">
+            <span class="pulse-dot"></span>
+            <span>GET STARTED</span>
+          </div>
+          <h2 class="welcome-title">Start a New Fairness Analysis</h2>
+          <p class="welcome-desc">
+            Upload a healthcare dataset and evaluate your AI model for performance, fairness and explainability.
+          </p>
+          <div class="action-buttons">
+            <button class="btn btn-primary btn-lg" onclick="switchDashSection('dataset');">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              Upload Dataset
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="loadSampleClinicalData();">
+              <i class="fa-solid fa-flask-vial"></i>
+              View Demo Analysis
+            </button>
+          </div>
+        </div>
+        <div class="welcome-badge-visual">
+          <div class="floating-metric-box">
+            <i class="fa-solid fa-shield-heart metric-icon"></i>
+            <div>
+              <div class="metric-title">Fairness Engine</div>
+              <div class="metric-subtitle">Demographic Parity & EOD Ready</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Visual Workflow Section -->
+      <section class="workflow-section">
+        <div class="section-title-wrap">
+          <h3 class="section-heading">Fairness Analysis Workflow</h3>
+          <p class="section-subtext">Follow these steps to evaluate and audit your clinical machine learning models</p>
+        </div>
+
+        <div class="workflow-grid">
+          <div class="workflow-step active-step" onclick="switchDashSection('dataset');" style="cursor: pointer;">
+            <div class="step-badge">01</div>
+            <div class="step-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
+            <div class="step-name">Upload Dataset</div>
+            <div class="step-desc">CSV or tabular clinical data</div>
+          </div>
+
+          <div class="workflow-step" onclick="switchDashSection('dataset');" style="cursor: pointer;">
+            <div class="step-badge">02</div>
+            <div class="step-icon"><i class="fa-solid fa-sliders"></i></div>
+            <div class="step-name">Configure Analysis</div>
+            <div class="step-desc">Set target & protected attributes</div>
+          </div>
+
+          <div class="workflow-step" onclick="switchDashSection('model');" style="cursor: pointer;">
+            <div class="step-badge">03</div>
+            <div class="step-icon"><i class="fa-solid fa-robot"></i></div>
+            <div class="step-name">Train Model</div>
+            <div class="step-desc">Train baseline clinical classifier</div>
+          </div>
+
+          <div class="workflow-step" onclick="switchDashSection('fairness');" style="cursor: pointer;">
+            <div class="step-badge">04</div>
+            <div class="step-icon"><i class="fa-solid fa-scale-unbalanced"></i></div>
+            <div class="step-name">Analyze Fairness</div>
+            <div class="step-desc">Compute bias & parity disparity</div>
+          </div>
+
+          <div class="workflow-step" onclick="switchDashSection('explain');" style="cursor: pointer;">
+            <div class="step-badge">05</div>
+            <div class="step-icon"><i class="fa-solid fa-eye"></i></div>
+            <div class="step-name">Explain Predictions</div>
+            <div class="step-desc">SHAP feature contribution insights</div>
+          </div>
+
+          <div class="workflow-step" onclick="switchDashSection('reports');" style="cursor: pointer;">
+            <div class="step-badge">06</div>
+            <div class="step-icon"><i class="fa-solid fa-file-contract"></i></div>
+            <div class="step-name">Generate Report</div>
+            <div class="step-desc">Export audit-ready PDF summary</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Analyses Section -->
+      <section class="recent-analyses-section">
+        <div class="section-title-wrap" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h3 class="section-heading">Recent Analyses</h3>
+            <p class="section-subtext">Latest clinical AI evaluations recorded in persistent audit history</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="switchDashSection('history');">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>View All History</span>
+          </button>
+        </div>
+
+        <div id="overview-recent-analyses-container">
+          <div class="dash-card empty-state-card">
+            <div class="empty-icon-circle">
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h4 class="empty-title">No analysis yet</h4>
+            <p class="empty-desc">
+              You have not conducted any fairness evaluations yet. Once you upload a dataset and run an analysis, your clinical reports and metrics will be logged here.
+            </p>
+            <button class="btn btn-primary" onclick="switchDashSection('dataset');">
+              <i class="fa-solid fa-plus"></i>
+              Begin First Analysis
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+
+    <!-- ==========================================
+         SECTION 2: DATASET UPLOAD & VALIDATION (STEP 2B)
+    =========================================== -->
+    <div id="section-dataset" class="dash-section" style="display: none;">
+      
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div>
+          <div class="breadcrumb-nav">
+            <span onclick="switchDashSection('dashboard');" class="breadcrumb-link">Dashboard</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span class="breadcrumb-current">Dataset Management</span>
+          </div>
+          <h1 class="header-title">Upload & Validate Dataset</h1>
+          <p class="header-subtitle">Upload clinical healthcare data and review dataset health, candidate attributes, and data quality.</p>
+        </div>
+        <div class="header-badge">
+          <i class="fa-solid fa-database"></i>
+          <span>Step 1: Data Ingestion</span>
+        </div>
+      </header>
+
+      <!-- Upload Dropzone Area -->
+      <section class="dash-card upload-dropzone-card">
+        <div class="dropzone-inner" id="dropzone-container">
+          <input type="file" id="csv-file-input" accept=".csv" style="display: none;" onchange="handleFileSelect(event);" />
+          <div class="dropzone-icon-circle">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <h3 class="dropzone-title">Upload Healthcare Dataset</h3>
+          <p class="dropzone-desc">Upload a CSV file containing tabular healthcare data.</p>
+          
+          <div class="dropzone-actions">
+            <button class="btn btn-primary" onclick="document.getElementById('csv-file-input').click();">
+              <i class="fa-solid fa-folder-open"></i>
+              Browse CSV File
+            </button>
+            <button class="btn btn-secondary" onclick="loadSampleClinicalData();">
+              <i class="fa-solid fa-heart-pulse"></i>
+              Load Sample Clinical Dataset
+            </button>
+          </div>
+
+          <div class="dropzone-formats">
+            <span class="format-pill"><i class="fa-solid fa-file-csv"></i> CSV (Comma Separated)</span>
+            <span class="format-pill"><i class="fa-solid fa-shield-halved"></i> Local Session State</span>
+            <span class="format-pill"><i class="fa-solid fa-lock"></i> Client-Side Processing</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dataset Summary Cards (Populated after upload) -->
+      <section class="dataset-summary-section">
+        <div class="section-title-wrap">
+          <h3 class="section-heading">Dataset Summary</h3>
+        </div>
+
+        <div class="summary-cards-grid" id="dataset-summary-grid">
+          <div class="dash-card status-card">
+            <div class="card-icon-wrap mint">
+              <i class="fa-solid fa-table-rows"></i>
+            </div>
+            <div class="status-card-content">
+              <div class="status-label">Rows</div>
+              <div class="status-value" id="summary-stat-rows">—</div>
+              <span class="status-pill pending" id="summary-stat-rows-pill">No data</span>
+            </div>
+          </div>
+
+          <div class="dash-card status-card">
+            <div class="card-icon-wrap mint">
+              <i class="fa-solid fa-table-columns"></i>
+            </div>
+            <div class="status-card-content">
+              <div class="status-label">Columns</div>
+              <div class="status-value" id="summary-stat-cols">—</div>
+              <span class="status-pill pending" id="summary-stat-cols-pill">No data</span>
+            </div>
+          </div>
+
+          <div class="dash-card status-card">
+            <div class="card-icon-wrap mint">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="status-card-content">
+              <div class="status-label">Missing Values</div>
+              <div class="status-value" id="summary-stat-missing">—</div>
+              <span class="status-pill pending" id="summary-stat-missing-pill">No data</span>
+            </div>
+          </div>
+
+          <div class="dash-card status-card">
+            <div class="card-icon-wrap mint">
+              <i class="fa-solid fa-clone"></i>
+            </div>
+            <div class="status-card-content">
+              <div class="status-label">Duplicate Rows</div>
+              <div class="status-value" id="summary-stat-duplicates">—</div>
+              <span class="status-pill pending" id="summary-stat-duplicates-pill">No data</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Validation Status Banner -->
+      <section class="validation-status-section" id="validation-section" style="display: none;">
+        <div class="section-title-wrap">
+          <h3 class="section-heading">Validation Status</h3>
+        </div>
+
+        <div class="dash-card validation-banner-card" id="validation-banner">
+          <div class="validation-banner-header">
+            <div class="validation-status-badge" id="validation-badge">
+              <i class="fa-solid fa-circle-check" id="validation-icon"></i>
+              <span id="validation-badge-text">Dataset Ready</span>
+            </div>
+            <span class="sample-tier-badge" id="sample-tier-badge">Standard Evaluation (n ≥ 50)</span>
+          </div>
+
+          <p class="validation-message" id="validation-message-text">
+            Dataset successfully loaded and verified. Ready for target and sensitive attribute configuration.
+          </p>
+
+          <div class="validation-checklist" id="validation-checklist">
+            <!-- Dynamically populated checklist items -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Target & Sensitive Attribute Configuration Card -->
+      <section class="attribute-config-section" id="attribute-config-section" style="display: none;">
+        <div class="section-title-wrap">
+          <h3 class="section-heading">Target & Sensitive Attribute Configuration</h3>
+          <p class="section-subtext">Specify the prediction objective and demographic subgroup attribute for fairness auditing.</p>
+        </div>
+
+        <div class="dash-card config-card">
+          <div class="config-grid">
+            
+            <!-- Target Variable Selection -->
+            <div class="config-field">
+              <label class="config-label">
+                <i class="fa-solid fa-bullseye config-icon-emerald"></i>
+                Target Variable (Outcome)
+                <span class="required-star">*</span>
+              </label>
+              <select id="select-target-var" class="config-select" onchange="handleConfigChange();">
+                <option value="">[ Select column ]</option>
+              </select>
+              <div class="candidate-suggestions" id="target-suggestions">
+                <span class="suggestion-label">Suggested Targets:</span>
+                <span id="target-suggestion-tags" class="tags-wrap">None detected</span>
+              </div>
+            </div>
+
+            <!-- Sensitive Attribute Selection -->
+            <div class="config-field">
+              <label class="config-label">
+                <i class="fa-solid fa-users config-icon-emerald"></i>
+                Sensitive Attribute (Protected Group)
+                <span class="required-star">*</span>
+              </label>
+              <select id="select-sensitive-attr" class="config-select" onchange="handleConfigChange();">
+                <option value="">[ Select column ]</option>
+              </select>
+              <div class="candidate-suggestions" id="sensitive-suggestions">
+                <span class="suggestion-label">Suggested Sensitive Attributes:</span>
+                <span id="sensitive-suggestion-tags" class="tags-wrap">None detected</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Configuration Status & Action -->
+          <div class="config-footer">
+            <div class="config-info-note">
+              <i class="fa-solid fa-circle-info"></i>
+              <span>Attribute selections are stored in your active session. Subgroup reliability rules (n&lt;30 / 30–49 / 50+) will be evaluated in the model analysis phase.</span>
+            </div>
+            <button id="btn-continue-config" class="btn btn-primary" disabled onclick="handleContinueToModel();">
+              <span>Continue to Model Configuration</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dataset Preview Table -->
+      <section class="dataset-preview-section" id="dataset-preview-section" style="display: none;">
+        <div class="section-title-wrap preview-header-wrap">
+          <div>
+            <h3 class="section-heading">Dataset Preview</h3>
+            <p class="section-subtext">Displaying the first 10 rows of the uploaded dataset</p>
+          </div>
+          <span class="preview-badge" id="preview-row-count-badge">First 10 Rows</span>
+        </div>
+
+        <div class="dash-card table-card">
+          <div class="table-responsive-wrapper">
+            <table class="data-table" id="preview-table">
+              <thead id="preview-table-head">
+                <!-- Dynamically populated table headers -->
+              </thead>
+              <tbody id="preview-table-body">
+                <!-- Dynamically populated table rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Column Information Table -->
+      <section class="column-info-section" id="column-info-section" style="display: none;">
+        <div class="section-title-wrap">
+          <h3 class="section-heading">Column Information</h3>
+          <p class="section-subtext">Inferred data types, missing value percentages, and cardinality breakdown</p>
+        </div>
+
+        <div class="dash-card table-card">
+          <div class="table-responsive-wrapper">
+            <table class="data-table" id="column-info-table">
+              <thead>
+                <tr>
+                  <th>Column Name</th>
+                  <th>Inferred Data Type</th>
+                  <th>Missing Values</th>
+                  <th>Missing %</th>
+                  <th>Unique Values</th>
+                  <th>Candidate Assessment</th>
+                </tr>
+              </thead>
+              <tbody id="column-info-body">
+                <!-- Dynamically populated column info rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- ==========================================
+         SECTION: EXISTING AI MODEL AUDIT (PHASE 13)
+    =========================================== -->
+    <div id="section-external-audit" class="dash-section" style="display: none;">
+      
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div>
+          <div class="breadcrumb-nav">
+            <span onclick="switchDashSection('dashboard');" class="breadcrumb-link">Dashboard</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span class="breadcrumb-current">Existing AI Model Audit</span>
+          </div>
+          <h1 class="header-title">Audit an Existing AI Model</h1>
+          <p class="header-subtitle">Evaluate an existing healthcare AI model using held-out predictions and evaluation evidence.</p>
+        </div>
+        <div class="header-badge" style="background: rgba(16, 185, 129, 0.1); color: #059669; border-color: rgba(16, 185, 129, 0.3);">
+          <i class="fa-solid fa-stethoscope"></i>
+          <span>External Model Audit</span>
+        </div>
+      </header>
+
+      <!-- Privacy & Architecture Protocol Banner -->
+      <div class="dash-card" style="background: #F8FAFC; border-left: 4px solid #16A34A; margin-bottom: 24px; padding: 18px 22px; border-radius: 8px;">
+        <div style="display: flex; gap: 14px; align-items: flex-start;">
+          <i class="fa-solid fa-shield-halved" style="color: #16A34A; font-size: 22px; margin-top: 2px;"></i>
+          <div>
+            <div style="font-weight: 700; color: #0F172A; font-size: 14px; margin-bottom: 4px;">Privacy-Conscious Evaluation Protocol</div>
+            <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.55;">
+              Designed for privacy-conscious model evaluation. Use synthetic, public, or fully de-identified evaluation data. Do not upload real patient PHI.
+              The external model can remain in the owner's environment. Asclepius evaluates the model using supplied evaluation evidence.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload Dropzone Area -->
+      <section class="dash-card upload-dropzone-card" style="margin-bottom: 24px;">
+        <div class="dropzone-inner" id="ext-dropzone-container" style="cursor: pointer;" onclick="if (!event.target.closest('button')) document.getElementById('ext-audit-file-input').click();">
+          <input type="file" id="ext-audit-file-input" accept=".csv" style="display: none;" onclick="this.value='';" onchange="handleExternalFileSelect(event);" />
+          <div class="dropzone-icon-circle">
+            <i class="fa-solid fa-file-waveform"></i>
+          </div>
+          <h3 class="dropzone-title" id="ext-dropzone-title">Upload Model Evaluation Results</h3>
+          <p class="dropzone-desc" id="ext-dropzone-desc">Upload a CSV containing existing model evaluation evidence.</p>
+          
+          <div id="ext-upload-status-box" style="display: none; margin: 12px auto; max-width: 520px; padding: 10px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; text-align: center;">
+            <span id="ext-upload-status-text"></span>
+          </div>
+
+          <div class="dropzone-actions">
+            <button id="btn-browse-ext-csv" class="btn btn-primary" onclick="document.getElementById('ext-audit-file-input').click();">
+              <i class="fa-solid fa-folder-open"></i>
+              Browse Evaluation CSV
+            </button>
+            <button id="btn-load-demo-audit" class="btn btn-secondary" onclick="loadDemoExternalAuditData();">
+              <i class="fa-solid fa-flask-vial"></i>
+              Load Demo Audit Evidence
+            </button>
+          </div>
+
+          <div class="dropzone-formats">
+            <span class="format-pill"><i class="fa-solid fa-file-csv"></i> CSV Format</span>
+            <span class="format-pill"><i class="fa-solid fa-lock"></i> Model-Agnostic</span>
+            <span class="format-pill"><i class="fa-solid fa-cube"></i> Optional Model (.pkl/.joblib)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Configuration & Column Mapping Container (Active once file is selected) -->
+      <div id="ext-audit-config-card" class="dash-card" style="display: none; margin-bottom: 24px;">
+        <div class="section-title-wrap" style="margin-bottom: 18px;">
+          <h3 class="section-heading"><i class="fa-solid fa-sliders" style="color: #16A34A; margin-right: 8px;"></i> Model Metadata & Column Mapping</h3>
+          <p class="section-subtext" id="ext-audit-config-subtext">Map the columns in your evaluation CSV to standard audit inputs and specify optional model metadata.</p>
+        </div>
+
+        <!-- Loaded Dataset Info Pill Banner -->
+        <div id="ext-loaded-file-meta-banner" style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 6px; padding: 10px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+          <div style="font-size: 13px; font-weight: 600; color: #166534; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-file-circle-check" style="color: #16A34A;"></i>
+            <span id="ext-loaded-filename-label">Loaded File: external_model_audit_demo.csv</span>
+          </div>
+          <div style="font-size: 12px; font-weight: 700; color: #15803D; display: flex; gap: 12px;">
+            <span id="ext-loaded-rows-pill"><i class="fa-solid fa-table-rows"></i> 600 Records</span>
+            <span id="ext-loaded-cols-pill"><i class="fa-solid fa-table-columns"></i> 5 Columns</span>
+          </div>
+        </div>
+
+        <!-- Model Metadata Fields Grid -->
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px 20px; margin-bottom: 22px;">
+          <div style="font-size: 12px; font-weight: 700; color: #15803D; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">
+            1. Model Metadata (For Audit Report & Trail)
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px;">Model Name</label>
+              <input type="text" id="ext-meta-model-name" class="form-control" value="Heart Risk Classifier" style="width: 100%; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px;">Model Version</label>
+              <input type="text" id="ext-meta-model-version" class="form-control" value="v1.2" style="width: 100%; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px;">Model Type / Architecture</label>
+              <input type="text" id="ext-meta-model-type" class="form-control" value="Random Forest" style="width: 100%; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px;">Target Outcome Name</label>
+              <input type="text" id="ext-meta-target-name" class="form-control" value="30-Day ICU Readmission" style="width: 100%; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px;" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Column Mapping Grid -->
+        <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px 20px; margin-bottom: 22px;">
+          <div style="font-size: 12px; font-weight: 700; color: #15803D; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">
+            2. Column Mapping (From CSV Headers)
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px;">
+                Ground Truth (y_true) <span style="color: #DC2626;">*</span>
+              </label>
+              <select id="ext-map-ytrue" class="form-control" onchange="validateExternalAuditConfig();" style="width: 100%; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px;"></select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px;">
+                Predicted Label (y_pred) <span style="color: #DC2626;">*</span>
+              </label>
+              <select id="ext-map-ypred" class="form-control" onchange="validateExternalAuditConfig();" style="width: 100%; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px;"></select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px;">
+                Prediction Probability (y_prob) <span style="color: #64748B; font-weight: normal;">(Optional)</span>
+              </label>
+              <select id="ext-map-yprob" class="form-control" onchange="validateExternalAuditConfig();" style="width: 100%; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px;"></select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px;">
+                Sensitive Attribute <span style="color: #DC2626;">*</span>
+              </label>
+              <select id="ext-map-sensitive" class="form-control" onchange="validateExternalAuditConfig();" style="width: 100%; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px;"></select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px;">
+                Record Identifier (ID) <span style="color: #64748B; font-weight: normal;">(Optional)</span>
+              </label>
+              <select id="ext-map-id" class="form-control" onchange="validateExternalAuditConfig();" style="width: 100%; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13px;"></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Explainability Evidence (Optional — Level 2 Audit) -->
+        <div id="ext-xai-evidence-card" style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 18px 20px; margin-bottom: 22px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 12px; font-weight: 700; color: #15803D; text-transform: uppercase; letter-spacing: 0.05em;">
+              3. Explainability Evidence (Optional — Level 2 Audit)
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button type="button" id="btn-load-shap-demo" class="btn btn-outline-secondary btn-sm" onclick="loadDemoShapAuditData();" title="Load built-in deterministic Level 2 SHAP demonstration package" style="font-size: 11px; padding: 3px 8px; border: 1px solid #CBD5E1; background: #FFFFFF; color: #0F766E; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                <i class="fa-solid fa-flask" style="color: #0F766E;"></i> Load SHAP Demo
+              </button>
+              <span id="ext-xai-status-pill" class="status-pill pending">Model-Agnostic Audit</span>
+            </div>
+          </div>
+          <p style="font-size: 12px; color: #64748B; margin-bottom: 14px; line-height: 1.5;">
+            <strong>SHAP requires access to the external model and its evaluation features.</strong> If only a prediction CSV is provided, Asclepius conducts a <em>Model-Agnostic Audit</em> and keeps feature-level SHAP attributions unavailable. To evaluate genuine SHAP explainability, optionally supply a compatible trained model file (.pkl, .joblib) and its evaluation features dataset.
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 14px;">
+            <!-- Upload Model -->
+            <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 12px 14px;">
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 6px;">
+                <i class="fa-solid fa-cube" style="color: #16A34A; margin-right: 4px;"></i> Trained Model File (.pkl, .joblib)
+              </label>
+              <input type="file" id="ext-model-file-input" accept=".pkl,.joblib,.pickle" style="display: none;" onchange="handleExternalModelFileSelect(event);" />
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <button type="button" id="btn-browse-ext-model" class="btn btn-secondary btn-sm" onclick="document.getElementById('ext-model-file-input').click();">
+                  <i class="fa-solid fa-upload"></i> Choose Model
+                </button>
+                <span id="ext-model-file-name" style="font-size: 11px; color: #64748B; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">No model selected</span>
+              </div>
+            </div>
+
+            <!-- Upload Evaluation Features -->
+            <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 12px 14px;">
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 6px;">
+                <i class="fa-solid fa-table" style="color: #16A34A; margin-right: 4px;"></i> Evaluation Features Dataset (.csv)
+              </label>
+              <input type="file" id="ext-features-file-input" accept=".csv" style="display: none;" onchange="handleExternalFeaturesFileSelect(event);" />
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <button type="button" id="btn-browse-ext-features" class="btn btn-secondary btn-sm" onclick="document.getElementById('ext-features-file-input').click();">
+                  <i class="fa-solid fa-upload"></i> Choose Features
+                </button>
+                <span id="ext-features-file-name" style="font-size: 11px; color: #64748B; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">No features selected</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semantic Protection Notice & Checkbox -->
+          <div style="background: #F1F5F9; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: #334155;">
+            <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; margin: 0;">
+              <input type="checkbox" id="ext-xai-include-sensitive" style="margin-top: 2px;" onchange="validateExplainabilityEvidenceClient();" />
+              <span>
+                <strong>Demographic Protection:</strong> The sensitive attribute is used strictly for fairness disparity evaluation. It is excluded from SHAP model features by default unless explicitly confirmed here.
+              </span>
+            </label>
+          </div>
+
+          <!-- Validate Explainability Inputs Action -->
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <button type="button" id="btn-validate-xai-inputs" class="btn btn-secondary btn-sm" onclick="validateExplainabilityEvidenceClient();">
+              <i class="fa-solid fa-circle-check"></i> Validate Explainability Inputs
+            </button>
+            <span id="ext-xai-validation-message" style="font-size: 12px; font-weight: 600; color: #64748B;">Level 1 active: Prediction-only evaluation.</span>
+          </div>
+        </div>
+
+        <!-- Validation Status Card -->
+        <div id="ext-validation-status-box" style="margin-bottom: 22px; padding: 14px 18px; border-radius: 8px; border: 1px solid #E2E8F0; background: #F8FAFC;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Audit Input Verification Status:</div>
+            <span id="ext-validation-badge" class="status-pill pending">Awaiting Verification</span>
+          </div>
+          <div id="ext-validation-summary-text" style="font-size: 12px; color: #475569; margin-bottom: 6px;"></div>
+          <ul id="ext-validation-issues-list" style="margin: 0; padding-left: 20px; font-size: 12px; color: #DC2626;"></ul>
+          <ul id="ext-validation-warnings-list" style="margin: 4px 0 0 0; padding-left: 20px; font-size: 12px; color: #D97706;"></ul>
+        </div>
+
+        <!-- Audit Execution Error Card -->
+        <div id="ext-audit-error-card" style="display: none; margin-bottom: 20px; padding: 14px 18px; border-radius: 8px; border: 1px solid #FCA5A5; background: #FEF2F2; color: #991B1B;">
+          <div style="display: flex; gap: 12px; align-items: flex-start;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 18px; margin-top: 2px; color: #DC2626;"></i>
+            <div>
+              <div id="ext-audit-error-title" style="font-weight: 700; font-size: 13px; margin-bottom: 2px; color: #991B1B;">Audit could not be started.</div>
+              <div id="ext-audit-error-msg" style="font-size: 12px; line-height: 1.5; color: #B91C1C;">Please correct the column mapping and resolve validation issues before proceeding.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Execution Action Buttons -->
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button id="btn-run-external-audit" class="btn btn-primary btn-lg" onclick="runExternalModelAudit();">
+            <i class="fa-solid fa-play"></i>
+            Run Model Audit & Fairness Evaluation
+          </button>
+          <button class="btn btn-secondary btn-lg" onclick="resetExternalAuditForm();">
+            <i class="fa-solid fa-rotate-left"></i>
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Future Integration Architecture Section -->
+      <section class="dash-card" style="margin-top: 30px; border: 1px dashed #CBD5E1; background: #F8FAFC;">
+        <div class="section-title-wrap">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+            <h3 class="section-heading" style="margin: 0;">Future Integration</h3>
+            <span style="font-size: 10px; font-weight: 700; background: #E2E8F0; color: #475569; padding: 2px 6px; border-radius: 4px; text-transform: uppercase;">Future Scope</span>
+          </div>
+          <p class="section-subtext">Planned deployment architecture for auditing external clinical models directly within enterprise hospital networks.</p>
+        </div>
+
+        <!-- Flowchart Card -->
+        <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 18px; margin-bottom: 16px; overflow-x: auto;">
+          <div style="display: flex; align-items: center; justify-content: space-between; min-width: 650px; text-align: center; gap: 10px;">
+            <div style="flex: 1; padding: 10px; background: #F1F5F9; border-radius: 6px; font-size: 12px; font-weight: 600;">
+              <i class="fa-solid fa-hospital" style="color: #64748B; margin-bottom: 4px; display: block; font-size: 16px;"></i>
+              Organization Environment
+            </div>
+            <i class="fa-solid fa-arrow-right" style="color: #94A3B8;"></i>
+            <div style="flex: 1; padding: 10px; background: #F1F5F9; border-radius: 6px; font-size: 12px; font-weight: 600;">
+              <i class="fa-solid fa-brain" style="color: #64748B; margin-bottom: 4px; display: block; font-size: 16px;"></i>
+              Healthcare AI Model
+            </div>
+            <i class="fa-solid fa-arrow-right" style="color: #94A3B8;"></i>
+            <div style="flex: 1; padding: 10px; background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 6px; font-size: 12px; font-weight: 700; color: #15803D;">
+              <i class="fa-solid fa-robot" style="color: #16A34A; margin-bottom: 4px; display: block; font-size: 16px;"></i>
+              Asclepius Local Agent
+            </div>
+            <i class="fa-solid fa-arrow-right" style="color: #94A3B8;"></i>
+            <div style="flex: 1; padding: 10px; background: #F1F5F9; border-radius: 6px; font-size: 12px; font-weight: 600;">
+              <i class="fa-solid fa-chart-column" style="color: #64748B; margin-bottom: 4px; display: block; font-size: 16px;"></i>
+              Audit Evidence
+            </div>
+            <i class="fa-solid fa-arrow-right" style="color: #94A3B8;"></i>
+            <div style="flex: 1; padding: 10px; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 6px; font-size: 12px; font-weight: 700; color: #16A34A;">
+              <i class="fa-solid fa-heart-pulse" style="color: #16A34A; margin-bottom: 4px; display: block; font-size: 16px;"></i>
+              Asclepius Dashboard
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 12px; color: #475569;">
+          <div style="padding: 10px; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 6px;">
+            <strong><i class="fa-solid fa-terminal" style="color: #16A34A; margin-right: 4px;"></i> Local CLI Agent:</strong> Containerized local scanner running inside customer VPC.
+          </div>
+          <div style="padding: 10px; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 6px;">
+            <strong><i class="fa-brands fa-python" style="color: #16A34A; margin-right: 4px;"></i> Python SDK:</strong> Direct programmatic model evaluation in ML pipelines.
+          </div>
+          <div style="padding: 10px; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 6px;">
+            <strong><i class="fa-solid fa-cloud" style="color: #16A34A; margin-right: 4px;"></i> Secure REST API:</strong> Evaluation payload transfer for automated audits.
+          </div>
+          <div style="padding: 10px; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 6px;">
+            <strong><i class="fa-solid fa-code-branch" style="color: #16A34A; margin-right: 4px;"></i> CI/CD Fairness Gate:</strong> Automated pull request blocker for clinical bias.
+          </div>
+        </div>
+      </section>
+
+      <!-- Developer Integration (SDK) Card (Phase 14) -->
+      <section class="dash-card" style="margin-top: 24px; border: 1px solid #CBD5E1; background: #FFFFFF; border-radius: 8px; padding: 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+          <div>
+            <h3 style="font-size: 16px; font-weight: 700; color: #0F172A; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-brands fa-python" style="color: #16A34A;"></i>
+              Developer Integration — Local Python SDK & CLI
+            </h3>
+            <p style="font-size: 13px; color: #64748B; margin: 0;">
+              Already have your own healthcare AI model? Run Asclepius locally using the Python SDK.
+            </p>
+          </div>
+          <span style="background: #ECFDF5; color: #16A34A; border: 1px solid #A7F3D0; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">
+            In-Situ Evaluation
+          </span>
+        </div>
+
+        <p style="font-size: 13px; color: #334155; margin-bottom: 12px; line-height: 1.5;">
+          Your model and evaluation data remain in your environment. Asclepius audits your fitted scikit-learn models directly in memory with zero remote telemetry or external data transfer.
+        </p>
+
+        <div style="background: #0F172A; color: #F8FAFC; border-radius: 6px; padding: 14px 18px; font-family: monospace; font-size: 12px; line-height: 1.6; overflow-x: auto; margin-bottom: 12px;">
+          <span style="color: #94A3B8;"># Install & run in your local Python environment:</span><br/>
+          <span style="color: #38BDF8;">from</span> asclepius <span style="color: #38BDF8;">import</span> FairAIAuditor<br/><br/>
+          auditor = FairAIAuditor(<br/>
+          &nbsp;&nbsp;model=my_fitted_model,<br/>
+          &nbsp;&nbsp;X_test=X_test,<br/>
+          &nbsp;&nbsp;y_test=y_test,<br/>
+          &nbsp;&nbsp;sensitive_features=X_test[<span style="color: #FCD34D;">"sex"</span>],<br/>
+          &nbsp;&nbsp;target_name=<span style="color: #FCD34D;">"readmitted_30d"</span>,<br/>
+          &nbsp;&nbsp;sensitive_name=<span style="color: #FCD34D;">"sex"</span><br/>
+          )<br/>
+          result = auditor.run()<br/>
+          <span style="color: #38BDF8;">print</span>(result.summary())<br/>
+          result.generate_report(<span style="color: #FCD34D;">"audit_report.pdf"</span>)
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center; font-size: 11px; color: #64748B;">
+          <i class="fa-solid fa-circle-info" style="color: #0284C7;"></i>
+          <span>CLI also available: <code>asclepius audit --demo</code> or <code>asclepius audit --data evaluation.csv</code>. See <code>docs/SDK_GUIDE.md</code> for full reference.</span>
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- ==========================================
+         SECTION 3: ML MODEL TRAINING & PERFORMANCE (PHASE 3)
+    =========================================== -->
+    <div id="section-model" class="dash-section" style="display: none;">
+      
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div>
+          <div class="breadcrumb-nav">
+            <span onclick="switchDashSection('dashboard');" class="breadcrumb-link">Dashboard</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span onclick="switchDashSection('dataset');" class="breadcrumb-link">Dataset</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span class="breadcrumb-current">ML Model Configuration & Training</span>
+          </div>
+          <h1 class="header-title">Clinical Model Selection & Training</h1>
+          <p class="header-subtitle">Train baseline and ensemble clinical classification models for binary healthcare outcome prediction.</p>
+        </div>
+        <div class="header-badge">
+          <i class="fa-solid fa-brain"></i>
+          <span>Step 2: Predictive Modeling</span>
+        </div>
+      </header>
+
+      <!-- Model Selection Section -->
+      <section class="model-selection-section">
+        <div class="section-title-wrap">
+          <h3 class="section-heading">1. Select Clinical Classification Algorithm</h3>
+          <p class="section-subtext">Choose a standardized machine learning model suitable for healthcare binary outcomes.</p>
+        </div>
+
+        <div class="model-cards-grid">
+          
+          <!-- Model Option 1: Logistic Regression -->
+          <div class="dash-card model-choice-card active-model" id="card-model-logistic_regression" onclick="selectModelAlgorithm('logistic_regression');">
+            <div class="model-card-header">
+              <div class="card-icon-wrap emerald">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+              <span class="model-type-badge">Clinical Baseline</span>
+            </div>
+            <h4 class="model-choice-title">Logistic Regression</h4>
+            <p class="model-choice-desc">
+              Interpretable linear model optimized for clinical risk scoring, odds ratio analysis, and high-transparency baseline auditing.
+            </p>
+            <div class="model-features-list">
+              <span><i class="fa-solid fa-check"></i> Standard Clinical Practice</span>
+              <span><i class="fa-solid fa-check"></i> Direct Coefficient Weights</span>
+              <span><i class="fa-solid fa-check"></i> Fast & Calibrated</span>
+            </div>
+          </div>
+
+          <!-- Model Option 2: Random Forest -->
+          <div class="dash-card model-choice-card" id="card-model-random_forest" onclick="selectModelAlgorithm('random_forest');">
+            <div class="model-card-header">
+              <div class="card-icon-wrap mint">
+                <i class="fa-solid fa-tree"></i>
+              </div>
+              <span class="model-type-badge">Ensemble</span>
+            </div>
+            <h4 class="model-choice-title">Random Forest</h4>
+            <p class="model-choice-desc">
+              Bagged ensemble of decision trees capturing non-linear physiological interactions and robust against clinical outlier variance.
+            </p>
+            <div class="model-features-list">
+              <span><i class="fa-solid fa-check"></i> Non-linear Interactions</span>
+              <span><i class="fa-solid fa-check"></i> Robust to Outliers</span>
+              <span><i class="fa-solid fa-check"></i> SHAP TreeExplainer Ready</span>
+            </div>
+          </div>
+
+          <!-- Model Option 3: Gradient Boosting -->
+          <div class="dash-card model-choice-card" id="card-model-gradient_boosting" onclick="selectModelAlgorithm('gradient_boosting');">
+            <div class="model-card-header">
+              <div class="card-icon-wrap mint">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <span class="model-type-badge">Ensemble</span>
+            </div>
+            <h4 class="model-choice-title">Gradient Boosting</h4>
+            <p class="model-choice-desc">
+              Sequentially boosted tree ensemble optimizing complex clinical loss gradients for high diagnostic sensitivity and recall.
+            </p>
+            <div class="model-features-list">
+              <span><i class="fa-solid fa-check"></i> High Predictive Power</span>
+              <span><i class="fa-solid fa-check"></i> Iterative Loss Minimization</span>
+              <span><i class="fa-solid fa-check"></i> Complex Decision Boundaries</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Training Hyperparameters & Execution Card -->
+      <section class="model-config-section">
+        <div class="section-title-wrap">
+          <h3 class="section-heading">2. Validation Split & Hyperparameters</h3>
+          <p class="section-subtext">Configure dataset partitioning, reproducible random seed, and class weighting.</p>
+        </div>
+
+        <div class="dash-card config-card">
+          <div class="model-params-grid">
+            
+            <!-- Test Split -->
+            <div class="param-field">
+              <label class="config-label">
+                <i class="fa-solid fa-pie-chart config-icon-emerald"></i>
+                Test Partition Split
+              </label>
+              <select id="param-test-split" class="config-select">
+                <option value="0.2" selected>20% Testing / 80% Training (Default)</option>
+                <option value="0.25">25% Testing / 75% Training</option>
+                <option value="0.3">30% Testing / 70% Training</option>
+              </select>
+              <span class="param-hint">Stratified splitting applied when class distribution allows.</span>
+            </div>
+
+            <!-- Random Seed -->
+            <div class="param-field">
+              <label class="config-label">
+                <i class="fa-solid fa-dice config-icon-emerald"></i>
+                Random Seed (Reproducibility)
+              </label>
+              <input type="number" id="param-random-seed" class="config-input" value="42" min="1" max="99999" />
+              <span class="param-hint">Ensures exact deterministic train/test splits and initialization.</span>
+            </div>
+
+            <!-- Class Weighting -->
+            <div class="param-field">
+              <label class="config-label">
+                <i class="fa-solid fa-scale-balanced config-icon-emerald"></i>
+                Class Weighting Strategy
+              </label>
+              <select id="param-class-weight" class="config-select">
+                <option value="none" selected>None (Natural Distribution)</option>
+                <option value="balanced">Balanced (Inverse Frequency Adjusted)</option>
+              </select>
+              <span class="param-hint">Adjusts loss weights inversely proportional to class frequencies.</span>
+            </div>
+
+            <!-- Baseline Decision Threshold -->
+            <div class="param-field">
+              <label class="config-label">
+                <i class="fa-solid fa-sliders config-icon-emerald"></i>
+                Baseline Decision Threshold (θ)
+              </label>
+              <input type="number" id="param-decision-threshold" class="config-input" value="0.50" min="0.05" max="0.95" step="0.01" />
+              <span class="param-hint">Operational decision boundary cut-point (default: 0.50).</span>
+            </div>
+
+          </div>
+
+          <!-- Selected Target & Sensitive Summary Bar -->
+          <div class="cohort-mapping-summary">
+            <div class="mapping-item">
+              <span class="mapping-label">Target Variable (Outcome):</span>
+              <strong id="model-selected-target" class="mapping-value">—</strong>
+            </div>
+            <div class="mapping-item">
+              <span class="mapping-label">Protected Group (Sensitive):</span>
+              <strong id="model-selected-sensitive" class="mapping-value">—</strong>
+            </div>
+            <div class="mapping-item">
+              <span class="mapping-label">Dataset Cohort:</span>
+              <strong id="model-selected-cohort" class="mapping-value">—</strong>
+            </div>
+          </div>
+
+          <!-- Training Action Area -->
+          <div class="model-action-bar">
+            <div class="clinical-disclaimer-note">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>Results are intended for model evaluation, bias auditing, and decision-support research and do not constitute autonomous medical diagnoses.</span>
+            </div>
+
+            <button id="btn-train-model" class="btn btn-primary btn-lg" onclick="executeModelTraining();">
+              <i class="fa-solid fa-play" id="train-btn-icon"></i>
+              <span id="train-btn-text">Train Clinical Model</span>
+            </button>
+          </div>
+
+          <!-- Training Error Alert (Hidden by default) -->
+          <div id="model-error-banner" class="dash-card error-banner-card" style="display: none; margin-top: 18px;">
+            <i class="fa-solid fa-circle-exclamation error-icon"></i>
+            <div>
+              <strong id="model-error-title">Training Failed</strong>
+              <p id="model-error-message" style="margin-top: 4px; font-size: 13px;"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Performance Evaluation Results (Hidden before training) -->
+      <section class="performance-results-section" id="model-results-section" style="display: none;">
+        <div class="section-title-wrap">
+          <div class="results-header-flex">
+            <div>
+              <h3 class="section-heading">3. Clinical Model Performance Evaluation</h3>
+              <p class="section-subtext" id="model-perf-subtext">Evaluation metrics computed on held-out test partition.</p>
+            </div>
+            <span class="status-pill ready" id="model-status-pill">Model Fitted Successfully</span>
+          </div>
+        </div>
+
+        <!-- 7 Core Metrics Summary Grid -->
+        <div class="metrics-cards-grid">
+          
+          <div class="dash-card metric-display-card">
+            <div class="metric-card-top">
+              <span class="metric-name">Accuracy</span>
+              <i class="fa-solid fa-bullseye metric-top-icon"></i>
+            </div>
+            <div class="metric-main-value" id="metric-val-accuracy">—</div>
+            <div class="metric-desc">Overall correct classifications</div>
+          </div>
+
+          <div class="dash-card metric-display-card">
+            <div class="metric-card-top">
+              <span class="metric-name">Balanced Accuracy</span>
+              <i class="fa-solid fa-scale-balanced metric-top-icon"></i>
+            </div>
+            <div class="metric-main-value" id="metric-val-bal-acc">—</div>
+            <div class="metric-desc">Mean of sensitivity & specificity</div>
+          </div>
+
+          <div class="dash-card metric-display-card">
+            <div class="metric-card-top">
+              <span class="metric-name">Precision (PPV)</span>
+              <i class="fa-solid fa-filter metric-top-icon"></i>
+            </div>
+            <div class="metric-main-value" id="metric-val-precision">—</div>
+            <div class="metric-desc">Positive predictive value</div>
+          </div>
+
+          <div class="dash-card metric-display-card highlight-card">
+            <div class="metric-card-top">
+              <span class="metric-name">Sensitivity / Recall</span>
+              <i class="fa-solid fa-heart-pulse metric-top-icon highlight-icon"></i>
+            </div>
+            <div class="metric-main-value highlight-val" id="metric-val-recall">—</div>
+            <div class="metric-desc">True positive clinical detection rate</div>
+          </div>
+
+          <div class="dash-card metric-display-card">
+            <div class="metric-card-top">
+              <span class="metric-name">Specificity (TNR)</span>
+              <i class="fa-solid fa-shield-check metric-top-icon"></i>
+            </div>
+            <div class="metric-main-value" id="metric-val-specificity">—</div>
+            <div class="metric-desc">True negative rate [TN / (TN+FP)]</div>
+          </div>
+
+          <div class="dash-card metric-display-card">
+            <div class="metric-card-top">
+              <span class="metric-name">F1-Score</span>
+              <i class="fa-solid fa-code-merge metric-top-icon"></i>
+            </div>
+            <div class="metric-main-value" id="metric-val-f1">—</div>
+            <div class="metric-desc">Harmonic mean of precision & recall</div>
+          </div>
+
+          <div class="dash-card metric-display-card highlight-card">
+            <div class="metric-card-top">
+              <span class="metric-name">ROC-AUC</span>
+              <i class="fa-solid fa-chart-area metric-top-icon highlight-icon"></i>
+            </div>
+            <div class="metric-main-value highlight-val" id="metric-val-roc-auc">—</div>
+            <div class="metric-desc">Area under receiver operating curve</div>
+          </div>
+
+        </div>
+
+        <!-- Diagnostic Grid: Confusion Matrix + Feature Importance -->
+        <div class="diagnostics-split-grid">
+          
+          <!-- Confusion Matrix Heatmap Card -->
+          <div class="dash-card cm-card">
+            <div class="cm-card-header">
+              <div>
+                <h4 class="diagnostic-card-title">Confusion Matrix (Held-out Test Cohort)</h4>
+                <p class="diagnostic-card-sub">Binary outcome classification breakdown</p>
+              </div>
+              <span class="sample-tier-badge" id="cm-test-size-badge">Test n = —</span>
+            </div>
+
+            <div class="cm-heatmap-container">
+              
+              <div class="cm-grid-labels">
+                <div class="cm-axis-y">Actual Positive / Negative</div>
+                <div class="cm-grid-matrix">
+                  <div class="cm-col-header">Predicted Negative (0)</div>
+                  <div class="cm-col-header">Predicted Positive (1)</div>
+
+                  <!-- Row 1: Actual Negative -->
+                  <div class="cm-cell cm-cell-tn">
+                    <span class="cm-cell-label">True Negative (TN)</span>
+                    <strong class="cm-cell-value" id="cm-val-tn">—</strong>
+                    <span class="cm-cell-sub">Correct Healthy</span>
+                  </div>
+                  <div class="cm-cell cm-cell-fp">
+                    <span class="cm-cell-label">False Positive (FP)</span>
+                    <strong class="cm-cell-value" id="cm-val-fp">—</strong>
+                    <span class="cm-cell-sub">Type I Error</span>
+                  </div>
+
+                  <!-- Row 2: Actual Positive -->
+                  <div class="cm-cell cm-cell-fn">
+                    <span class="cm-cell-label">False Negative (FN)</span>
+                    <strong class="cm-cell-value" id="cm-val-fn">—</strong>
+                    <span class="cm-cell-sub">Type II Error (Missed)</span>
+                  </div>
+                  <div class="cm-cell cm-cell-tp">
+                    <span class="cm-cell-label">True Positive (TP)</span>
+                    <strong class="cm-cell-value" id="cm-val-tp">—</strong>
+                    <span class="cm-cell-sub">Correct Detected</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cm-formula-notes">
+                <div class="formula-chip">
+                  <span>Sensitivity (TPR):</span>
+                  <strong id="cm-formula-sens">—</strong>
+                </div>
+                <div class="formula-chip">
+                  <span>Specificity (TNR):</span>
+                  <strong id="cm-formula-spec">—</strong>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Feature Importance / Risk Weights Card -->
+          <div class="dash-card feature-importance-card">
+            <div class="fi-card-header">
+              <div>
+                <h4 class="diagnostic-card-title">Top Predictive Features</h4>
+                <p class="diagnostic-card-sub" id="fi-algorithm-sub">Relative importance ranking from fitted model</p>
+              </div>
+              <span class="preview-badge"><i class="fa-solid fa-arrow-down-wide-short"></i> Ranked</span>
+            </div>
+
+            <div class="feature-importance-list" id="feature-importance-container">
+              <!-- Dynamically populated feature bars -->
+            </div>
+
+            <p class="fi-causality-note">
+              <i class="fa-solid fa-circle-info"></i>
+              <span>Feature importance rankings reflect model associations and statistical weight in predictions, and do not establish clinical causation.</span>
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Next Phase Navigation Card -->
+        <div class="dash-card proceed-phase-card">
+          <div class="proceed-card-content">
+            <div class="proceed-icon-circle">
+              <i class="fa-solid fa-scale-unbalanced-flip"></i>
+            </div>
+            <div>
+              <h4 class="proceed-title">Model Baseline Ready for Fairness Auditing</h4>
+              <p class="proceed-desc" id="proceed-summary-desc">
+                Predictions, probability scores, and protected group partitions are preserved in the session.
+              </p>
+            </div>
+          </div>
+          <button id="btn-proceed-fairness" class="btn btn-primary btn-lg" onclick="switchDashSection('fairness');">
+            <span>Proceed to Fairness Analysis</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         SECTION 4: FAIRNESS ANALYSIS (PHASE 4)
+    =========================================== -->
+    <div id="section-fairness" class="dash-section" style="display: none;">
+      
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div>
+          <div class="breadcrumb-nav">
+            <span onclick="switchDashSection('dashboard');" class="breadcrumb-link">Dashboard</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span onclick="switchDashSection('model');" class="breadcrumb-link">ML Model</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span class="breadcrumb-current">Fairness & Bias Analysis</span>
+          </div>
+          <h1 class="header-title">Fairness & Bias Evaluation</h1>
+          <p class="header-subtitle">Evaluate whether model outcomes differ across the selected demographic groups.</p>
+        </div>
+        <div class="header-badge">
+          <i class="fa-solid fa-scale-balanced"></i>
+          <span>Step 3: Algorithmic Auditing</span>
+        </div>
+      </header>
+
+      <!-- Empty State before Model Training -->
+      <div id="fairness-empty-state" class="dash-card empty-state-card" style="display: none;">
+        <div class="empty-icon-circle">
+          <i class="fa-solid fa-scale-unbalanced"></i>
+        </div>
+        <h4 class="empty-title">No Trained Model Found</h4>
+        <p class="empty-desc">
+          Fairness analysis requires a fitted clinical classification model and test predictions. Please configure and train a model first.
+        </p>
+        <button class="btn btn-primary" onclick="switchDashSection('model');">
+          <i class="fa-solid fa-brain"></i>
+          Go to ML Model Section
+        </button>
+      </div>
+
+      <!-- Main Fairness Container -->
+      <div id="fairness-content-area">
+
+        <!-- 1. Reliability Warning Banner (Conditionally rendered when n < 30) -->
+        <section class="reliability-warning-section" id="fairness-reliability-banner" style="display: none;">
+          <div class="dash-card warning-banner-card">
+            <div class="warning-banner-header">
+              <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+              <div>
+                <h4 class="warning-title">Fairness Reliability Warning (Sample Size Notice)</h4>
+                <p class="warning-desc">
+                  One or more demographic subgroups in the evaluation set contain fewer than 30 samples.
+                  Statistical disparity metrics for small cohorts have wider variance and must be interpreted with caution.
+                </p>
+              </div>
+            </div>
+            <div class="reliability-chips-grid" id="fairness-reliability-chips">
+              <!-- Dynamically populated subgroup reliability tags -->
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Overall Fairness Verdict Card -->
+        <section class="fairness-verdict-section">
+          <div class="dash-card verdict-card" id="fairness-verdict-card">
+            <div class="verdict-card-header">
+              <div class="verdict-badge-wrap">
+                <span class="verdict-pill" id="fairness-verdict-badge">Evaluating...</span>
+                <span class="screening-standard-tag"><i class="fa-solid fa-shield-halved"></i> Project Screening Criteria</span>
+              </div>
+              <div class="verdict-cohort-meta">
+                <span id="fairness-protected-attribute-label">Protected Group: <strong>—</strong></span>
+                <span>•</span>
+                <span id="fairness-target-outcome-label">Outcome: <strong>—</strong></span>
+              </div>
+            </div>
+
+            <div class="verdict-body">
+              <h3 class="verdict-title" id="fairness-verdict-title">Model Fairness Assessment</h3>
+              <p class="verdict-lead" id="fairness-verdict-lead">
+                Evaluation across demographic subgroups against project-level screening thresholds.
+              </p>
+
+              <div class="verdict-reasons-box">
+                <div class="reasons-box-header">
+                  <i class="fa-solid fa-clipboard-list"></i>
+                  <span>Supporting Evaluation Evidence:</span>
+                </div>
+                <ul class="reasons-list" id="fairness-reasons-list">
+                  <!-- Dynamically populated reason items -->
+                </ul>
+              </div>
+            </div>
+
+            <div class="verdict-footer-note">
+              <i class="fa-solid fa-circle-info"></i>
+              <span>Fairness thresholds are project screening criteria and should not be interpreted as universal clinical or regulatory standards.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Core 5 Disparity Metric Cards -->
+        <section class="fairness-metrics-section">
+          <div class="section-title-wrap">
+            <h3 class="section-heading">Core Algorithmic Fairness Metrics</h3>
+            <p class="section-subtext">Quantified disparity metrics comparing selection rates, error distributions, and clinical sensitivity</p>
+          </div>
+
+          <div class="fairness-metrics-grid">
+            
+            <!-- Metric 1: Demographic Parity Difference -->
+            <div class="dash-card fairness-metric-card" id="card-metric-dpd">
+              <div class="f-metric-top">
+                <span class="f-metric-title">Demographic Parity Diff (DPD)</span>
+                <span class="f-status-pill pass" id="status-pill-dpd">PASS</span>
+              </div>
+              <div class="f-metric-value" id="val-fairness-dpd">—</div>
+              <div class="f-metric-threshold">Threshold: <strong id="thresh-dpd">≤ 0.05</strong></div>
+              <p class="f-metric-desc">Gap between highest and lowest positive outcome selection rate.</p>
+            </div>
+
+            <!-- Metric 2: Disparate Impact Ratio (80% Rule) -->
+            <div class="dash-card fairness-metric-card" id="card-metric-dir">
+              <div class="f-metric-top">
+                <span class="f-metric-title">Disparate Impact Ratio (DIR)</span>
+                <span class="f-status-pill pass" id="status-pill-dir">PASS</span>
+              </div>
+              <div class="f-metric-value" id="val-fairness-dir">—</div>
+              <div class="f-metric-threshold">Threshold: <strong id="thresh-dir">0.80–1.25 (80% Rule)</strong></div>
+              <p class="f-metric-desc">Ratio of lowest to highest group positive selection rate.</p>
+            </div>
+
+            <!-- Metric 3: Equal Opportunity Difference -->
+            <div class="dash-card fairness-metric-card" id="card-metric-eopd">
+              <div class="f-metric-top">
+                <span class="f-metric-title">Equal Opportunity Diff (EOpD)</span>
+                <span class="f-status-pill pass" id="status-pill-eopd">PASS</span>
+              </div>
+              <div class="f-metric-value" id="val-fairness-eopd">—</div>
+              <div class="f-metric-threshold">Threshold: <strong id="thresh-eopd">≤ 0.05</strong></div>
+              <p class="f-metric-desc">Maximum gap in True Positive Rate (Sensitivity / Recall) across groups.</p>
+            </div>
+
+            <!-- Metric 4: Equalized Odds Difference -->
+            <div class="dash-card fairness-metric-card" id="card-metric-eod">
+              <div class="f-metric-top">
+                <span class="f-metric-title">Equalized Odds Diff (EOD)</span>
+                <span class="f-status-pill pass" id="status-pill-eod">PASS</span>
+              </div>
+              <div class="f-metric-value" id="val-fairness-eod">—</div>
+              <div class="f-metric-threshold">Threshold: <strong id="thresh-eod">≤ 0.05</strong></div>
+              <p class="f-metric-desc">Max of TPR gap (<span id="val-tpr-gap">—</span>) and FPR gap (<span id="val-fpr-gap">—</span>).</p>
+            </div>
+
+            <!-- Metric 5: False Negative Rate Disparity (Clinical Underdiagnosis) -->
+            <div class="dash-card fairness-metric-card highlight-metric" id="card-metric-fnr">
+              <div class="f-metric-top">
+                <span class="f-metric-title">Underdiagnosis Disparity (FNR)</span>
+                <span class="f-status-pill pass" id="status-pill-fnr">PASS</span>
+              </div>
+              <div class="f-metric-value highlight-val" id="val-fairness-fnr">—</div>
+              <div class="f-metric-threshold">Threshold: <strong id="thresh-fnr">≤ 0.05</strong></div>
+              <p class="f-metric-desc">Gap in missed positive cases between protected groups.</p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 4. Subgroup Performance Breakdown Table -->
+        <section class="subgroup-table-section">
+          <div class="section-title-wrap">
+            <h3 class="section-heading">Subgroup Performance Breakdown</h3>
+            <p class="section-subtext">Detailed diagnostic performance, selection rates, and reliability tiering for each demographic group</p>
+          </div>
+
+          <div class="dash-card table-card">
+            <div class="table-responsive-wrapper">
+              <table class="data-table" id="fairness-subgroup-table">
+                <thead>
+                  <tr>
+                    <th>Demographic Subgroup</th>
+                    <th>Sample (n)</th>
+                    <th>Selection Rate</th>
+                    <th>Sensitivity (TPR)</th>
+                    <th>Underdiagnosis (FNR)</th>
+                    <th>Specificity (TNR)</th>
+                    <th>FPR</th>
+                    <th>Accuracy</th>
+                    <th>Sample Reliability</th>
+                    <th>Fairness Status</th>
+                  </tr>
+                </thead>
+                <tbody id="fairness-subgroup-tbody">
+                  <!-- Dynamically populated subgroup metric rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Visual Disparity Comparison Charts & Clinical Context Grid -->
+        <div class="diagnostics-split-grid">
+          
+          <!-- Visual Disparity Progress Chart Card -->
+          <div class="dash-card visual-disparity-card">
+            <div class="cm-card-header">
+              <div>
+                <h4 class="diagnostic-card-title">Subgroup Selection Rate Comparison</h4>
+                <p class="diagnostic-card-sub">Positive prediction rates across evaluated demographic groups</p>
+              </div>
+              <span class="preview-badge"><i class="fa-solid fa-chart-bar"></i> Disparity View</span>
+            </div>
+
+            <div class="disparity-bars-container" id="selection-rate-bars-container">
+              <!-- Dynamically populated subgroup selection rate bars -->
+            </div>
+          </div>
+
+          <!-- Clinical Safety Context Card -->
+          <div class="dash-card clinical-context-card">
+            <div class="cm-card-header">
+              <div>
+                <h4 class="diagnostic-card-title">Clinical Impact: Why False Negative Rate Matters</h4>
+                <p class="diagnostic-card-sub">Healthcare-specific algorithmic fairness considerations</p>
+              </div>
+              <div class="card-icon-wrap emerald">
+                <i class="fa-solid fa-heart-pulse"></i>
+              </div>
+            </div>
+
+            <div class="clinical-context-content">
+              <p>
+                In healthcare AI, algorithmic bias often manifests as an uneven <strong>False Negative Rate (FNR)</strong> across demographic groups.
+              </p>
+              <div class="clinical-callout-box">
+                <i class="fa-solid fa-triangle-exclamation callout-icon"></i>
+                <div>
+                  <strong>Clinical Disparity Indicator:</strong>
+                  <p>
+                    A higher false-negative rate for one subgroup means the model is missing more positive disease/risk cases in that group relative to others. This is a model-level disparity signal that warrants clinical review and threshold calibration.
+                  </p>
+                </div>
+              </div>
+              <p class="disclaimer-subtext">
+                Metric differences alone do not prove clinical harm or intent; they serve as quantitative screening triggers for safety and equity audits.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 6. Proceed to Explainable AI CTA -->
+        <div class="dash-card proceed-phase-card">
+          <div class="proceed-card-content">
+            <div class="proceed-icon-circle">
+              <i class="fa-solid fa-lightbulb"></i>
+            </div>
+            <div>
+              <h4 class="proceed-title">Fairness Evaluation Complete</h4>
+              <p class="proceed-desc" id="fairness-proceed-desc">
+                Demographic disparity metrics and subgroup breakdowns are stored. Proceed to Explainable AI to analyze SHAP feature attributions.
+              </p>
+            </div>
+          </div>
+          <button id="btn-proceed-explain" class="btn btn-primary btn-lg" onclick="switchDashSection('explain');">
+            <span>Proceed to Explainable AI</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         SECTION 5: EXPLAINABLE AI (XAI) USING SHAP (PHASE 5)
+    =========================================== -->
+    <div id="section-explain" class="dash-section" style="display: none;">
+      
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div>
+          <div class="breadcrumb-nav">
+            <span onclick="switchDashSection('dashboard');" class="breadcrumb-link">Dashboard</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span onclick="switchDashSection('model');" class="breadcrumb-link">ML Model</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span onclick="switchDashSection('fairness');" class="breadcrumb-link">Fairness</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span class="breadcrumb-current">Explainable AI (SHAP)</span>
+          </div>
+          <h1 class="header-title">Explainable AI & Feature Attributions (SHAP)</h1>
+          <p class="header-subtitle">Evaluate feature influence on model predictions using game-theoretic Shapley values.</p>
+        </div>
+        <div class="header-badge">
+          <i class="fa-solid fa-lightbulb"></i>
+          <span>Step 4: Model Explainability</span>
+        </div>
+      </header>
+
+      <!-- External Audit SHAP Unavailable Callout Banner -->
+      <div id="ext-shap-unavailable-banner" class="dash-card" style="display: none; background: #FFFBEB; border: 1.5px solid #FDE68A; margin-bottom: 24px; padding: 20px 24px; border-radius: 10px;">
+        <div style="display: flex; gap: 16px; align-items: flex-start;">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: #FEF3C7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fa-solid fa-triangle-exclamation" style="color: #D97706; font-size: 20px;"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+              <h3 style="font-size: 16px; font-weight: 700; color: #92400E; margin: 0;">SHAP Unavailable — Model Internals Were Not Provided</h3>
+              <span style="font-size: 11px; font-weight: 700; background: #FEF3C7; color: #B45309; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">External Audit Mode</span>
+            </div>
+            <p style="font-size: 13.5px; color: #78350F; margin: 0 0 10px 0; line-height: 1.55;">
+              This evaluation was conducted in <strong>Existing AI Model Audit</strong> mode using held-out prediction evidence.
+              Because the external model architecture, parameters, and decision trees were not provided, feature-level SHAP attributions cannot be calculated and are withheld to maintain clinical and scientific integrity.
+            </p>
+            <div style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #92400E; background: rgba(217, 119, 6, 0.1); padding: 4px 10px; border-radius: 4px;">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>Fabricated SHAP explanations are strictly prohibited under Asclepius clinical evaluation standards.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- External Audit Limitation Panel -->
+      <div id="ext-shap-limitation-panel" class="dash-card" style="display: none; padding: 28px; margin-bottom: 24px; border-radius: 12px; background: #FFFFFF; border: 1.5px solid #E2E8F0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid #F1F5F9; padding-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; border-radius: 10px; background: #EFF6FF; color: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+              <i class="fa-solid fa-circle-nodes"></i>
+            </div>
+            <div>
+              <h3 style="font-size: 18px; font-weight: 700; color: #0F172A; margin: 0;">Feature-Level Explainability Unavailable</h3>
+              <p style="font-size: 13px; color: #64748B; margin: 2px 0 0 0;">External Model Audit Explainability Boundaries</p>
+            </div>
+          </div>
+          <span style="font-size: 12px; font-weight: 600; background: #F1F5F9; color: #475569; padding: 4px 12px; border-radius: 20px; border: 1px solid #CBD5E1;">
+            <i class="fa-solid fa-lock" style="margin-right: 5px;"></i>Model Internals Withheld
+          </span>
+        </div>
+
+        <p style="font-size: 14.5px; color: #334155; line-height: 1.6; margin: 0 0 24px 0;">
+          External Model Audit received held-out prediction evidence, but the original model internals and feature-level inputs were not provided. Therefore, feature-level SHAP attribution cannot be calculated without making unsupported assumptions.
+        </p>
+
+        <!-- Comparison Grid: Available Evidence vs Unavailable Model Internals -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 28px;">
+          
+          <!-- Available Evidence Card -->
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+              <div style="width: 28px; height: 28px; border-radius: 6px; background: #DCFCE7; color: #16A34A; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <h4 style="font-size: 15px; font-weight: 700; color: #166534; margin: 0;">Available Evidence</h4>
+            </div>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font-size: 13.5px; color: #334155;">
+              <li style="display: flex; align-items: flex-start; gap: 10px;">
+                <i class="fa-solid fa-check" style="color: #16A34A; margin-top: 3px;"></i>
+                <span><strong>Ground-truth labels (y_true)</strong> — Verified clinical outcomes</span>
+              </li>
+              <li style="display: flex; align-items: flex-start; gap: 10px;">
+                <i class="fa-solid fa-check" style="color: #16A34A; margin-top: 3px;"></i>
+                <span><strong>Model predictions (y_pred)</strong> — Binary risk classifications</span>
+              </li>
+              <li style="display: flex; align-items: flex-start; gap: 10px;">
+                <i class="fa-solid fa-check" style="color: #16A34A; margin-top: 3px;"></i>
+                <span><strong>Prediction probabilities (y_prob)</strong> — Confidence scores, when supplied</span>
+              </li>
+              <li style="display: flex; align-items: flex-start; gap: 10px;">
+                <i class="fa-solid fa-check" style="color: #16A34A; margin-top: 3px;"></i>
+                <span><strong>Sensitive-group information</strong> — Protected attribute cohorts</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Unavailable Card -->
+          <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 10px; padding: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+              <div style="width: 28px; height: 28px; border-radius: 6px; background: #FEE2E2; color: #DC2626; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                <i class="fa-solid fa-xmark"></i>
+              </div>
+              <h4 style="font-size: 15px; font-weight: 700; color: #991B1B; margin: 0;">Unavailable</h4>
+            </div>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font-size: 13.5px; color: #7F1D1D;">
+              <li style="display: flex; align-items: flex-start; gap: 10px;">
+                <i class="fa-solid fa-xmark" style="color: #DC2626; margin-top: 3px;"></i>
+                <span><strong>Original model object</strong> — Fitted pipeline withheld by external vendor</span>
+              </li>
+              <li style="display: flex; align-items: flex-start; gap: 10px;">
+                <i class="fa-solid fa-xmark" style="color: #DC2626; margin-top: 3px;"></i>
+                <span><strong>Model architecture / parameters</strong> — Estimator parameters, weights, trees</span>
+              </li>
+              <li style="display: flex; align-items: flex-start; gap: 10px;">
+                <i class="fa-solid fa-xmark" style="color: #DC2626; margin-top: 3px;"></i>
+                <span><strong>Feature-level model inputs</strong> — Clinical features used during inference</span>
+              </li>
+              <li style="display: flex; align-items: flex-start; gap: 10px;">
+                <i class="fa-solid fa-xmark" style="color: #DC2626; margin-top: 3px;"></i>
+                <span><strong>Feature-level SHAP attribution</strong> — Game-theoretic Shapley contributions</span>
+              </li>
+              <li style="display: flex; align-items: flex-start; gap: 10px;">
+                <i class="fa-solid fa-xmark" style="color: #DC2626; margin-top: 3px;"></i>
+                <span><strong>Individual feature contribution</strong> — Per-variable patient attributions</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Mode Distinction Guidance -->
+        <div style="background: #F8FAFC; border-left: 4px solid #3B82F6; padding: 14px 18px; border-radius: 6px; margin-bottom: 24px;">
+          <div style="font-size: 13px; color: #334155; line-height: 1.5;">
+            <strong>Pipeline Mode Distinction:</strong>
+            <ul style="margin: 6px 0 0 18px; padding: 0;">
+              <li><strong>Local Model Mode:</strong> Actual model available → TreeExplainer / LinearExplainer calculates full global and patient-level SHAP attributions.</li>
+              <li><strong>External Model Audit Mode:</strong> Only prediction evidence available → feature-level SHAP is withheld to prevent unscientific fabrication.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Proceed to Recommendations Navigation CTA -->
+        <div style="display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid #F1F5F9; padding-top: 20px;">
+          <button id="btn-proceed-from-ext-shap" class="btn btn-primary" onclick="switchDashSection('recommendations');">
+            <span>Proceed to AI Recommendations</span>
+            <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Empty State before Model Training -->
+      <div id="explain-empty-state" class="dash-card empty-state-card" style="display: none;">
+        <div class="empty-icon-circle">
+          <i class="fa-solid fa-lightbulb"></i>
+        </div>
+        <h4 class="empty-title">No Trained Model Found</h4>
+        <p class="empty-desc">
+          SHAP explanations require a fitted machine learning pipeline and test cohort. Please train a clinical model first.
+        </p>
+        <button class="btn btn-primary" onclick="switchDashSection('model');">
+          <i class="fa-solid fa-brain"></i>
+          Go to ML Model Section
+        </button>
+      </div>
+
+      <!-- Main Explainability Container -->
+      <div id="explain-content-area" style="display: none;">
+
+        <!-- 1. SHAP Metadata Summary Cards Grid -->
+        <section class="summary-cards-grid shap-summary-grid">
+          <div class="dash-card status-card">
+            <div class="card-icon-wrap mint">
+              <i class="fa-solid fa-microchip"></i>
+            </div>
+            <div class="status-card-content">
+              <div class="status-label">SHAP Explainer</div>
+              <div class="status-value" id="shap-explainer-type">TreeExplainer</div>
+              <span class="status-pill ready" id="shap-model-tag">Ensemble Classifier</span>
+            </div>
+          </div>
+
+          <div class="dash-card status-card">
+            <div class="card-icon-wrap emerald">
+              <i class="fa-solid fa-users-viewfinder"></i>
+            </div>
+            <div class="status-card-content">
+              <div class="status-label">Evaluation Cohort</div>
+              <div class="status-value" id="shap-samples-count">12 / 12 Patients</div>
+              <span class="status-pill ready" id="shap-sample-cap-tag">Sample Cap: 500</span>
+            </div>
+          </div>
+
+          <div class="dash-card status-card">
+            <div class="card-icon-wrap mint">
+              <i class="fa-solid fa-calculator"></i>
+            </div>
+            <div class="status-card-content">
+              <div class="status-label">Base Value (E[f(x)])</div>
+              <div class="status-value" id="shap-base-val">0.484</div>
+              <span class="status-pill ready">Cohort Baseline</span>
+            </div>
+          </div>
+
+          <div class="dash-card status-card">
+            <div class="card-icon-wrap mint">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="status-card-content">
+              <div class="status-label">Protected Group Status</div>
+              <div class="status-value" id="shap-sensitive-status">Included in Features</div>
+              <span class="status-pill info" id="shap-sensitive-pill">Transparency Monitored</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Global Feature Importance (Mean Absolute SHAP) -->
+        <section class="global-shap-section">
+          <div class="section-title-wrap">
+            <h3 class="section-heading">Global Feature Importance (Mean |SHAP| Impact)</h3>
+            <p class="section-subtext">Quantifies overall feature influence on model predictions across all evaluated test patients</p>
+          </div>
+
+          <div class="dash-card shap-global-card">
+            <div class="fi-card-header">
+              <div>
+                <h4 class="diagnostic-card-title">Ranked Feature Attribution Impact</h4>
+                <p class="diagnostic-card-sub" id="shap-global-sub">Computed across test patients using exact Shapley values</p>
+              </div>
+              <span class="preview-badge"><i class="fa-solid fa-chart-column"></i> Global Attributions</span>
+            </div>
+
+            <div class="shap-bars-container" id="shap-global-bars-container">
+              <!-- Dynamically populated global SHAP bars -->
+            </div>
+
+            <div class="shap-legend-row">
+              <div class="shap-legend-item">
+                <span class="legend-dot dot-increase"></span>
+                <span>Positive Association (Generally Increases Risk/Prediction)</span>
+              </div>
+              <div class="shap-legend-item">
+                <span class="legend-dot dot-decrease"></span>
+                <span>Negative Association (Generally Decreases Risk/Prediction)</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Local Patient-Level Prediction Explainer -->
+        <section class="local-shap-section">
+          <div class="section-title-wrap">
+            <h3 class="section-heading">Local Patient Prediction Explanation</h3>
+            <p class="section-subtext">Select an individual patient from the test cohort to inspect their feature-by-feature SHAP contribution waterfall</p>
+          </div>
+
+          <div class="dash-card local-explainer-card">
+            <div class="local-selector-header">
+              <div class="selector-left">
+                <label for="local-patient-select" class="selector-label">
+                  <i class="fa-solid fa-hospital-user"></i>
+                  Select Test Patient:
+                </label>
+                <select id="local-patient-select" class="form-select form-select-sm" onchange="onSelectPatientExplanation(this.value)">
+                  <!-- Dynamically populated patient options -->
+                </select>
+              </div>
+              <div class="patient-metrics-summary" id="patient-summary-chips">
+                <!-- Dynamically populated patient outcome chips -->
+              </div>
+            </div>
+
+            <div class="local-waterfall-split">
+              
+              <!-- Left: Positive Risk Drivers -->
+              <div class="contribution-box positive-box">
+                <div class="contrib-box-header">
+                  <i class="fa-solid fa-arrow-trend-up"></i>
+                  <span>Top Risk-Increasing Attributions (+SHAP)</span>
+                </div>
+                <div class="contrib-list" id="local-positive-contrib-list">
+                  <!-- Dynamically populated positive SHAP items -->
+                </div>
+              </div>
+
+              <!-- Right: Negative Risk Reducers -->
+              <div class="contribution-box negative-box">
+                <div class="contrib-box-header">
+                  <i class="fa-solid fa-arrow-trend-down"></i>
+                  <span>Top Risk-Decreasing Attributions (-SHAP)</span>
+                </div>
+                <div class="contrib-list" id="local-negative-contrib-list">
+                  <!-- Dynamically populated negative SHAP items -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Full Feature Value & SHAP Table for Selected Patient -->
+            <div class="local-table-wrap">
+              <h5 class="local-table-title">Full Patient Feature Breakdown & Shapley Value Table</h5>
+              <div class="table-responsive-wrapper">
+                <table class="data-table" id="local-shap-detail-table">
+                  <thead>
+                    <tr>
+                      <th>Feature Name</th>
+                      <th>Patient Recorded Value</th>
+                      <th>SHAP Contribution</th>
+                      <th>Direction / Impact</th>
+                    </tr>
+                  </thead>
+                  <tbody id="local-shap-tbody">
+                    <!-- Dynamically populated local table rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 4. Clinical Safety & Fairness vs Explainability Context Grid -->
+        <section class="xai-context-grid">
+          
+          <!-- Sensitive Attribute Transparency Card -->
+          <div class="dash-card clinical-context-card">
+            <div class="cm-card-header">
+              <div>
+                <h4 class="diagnostic-card-title">Protected Attribute Transparency</h4>
+                <p class="diagnostic-card-sub">Tracking demographic variable exposure</p>
+              </div>
+              <div class="card-icon-wrap mint">
+                <i class="fa-solid fa-eye"></i>
+              </div>
+            </div>
+            <div class="clinical-context-content">
+              <p id="shap-sensitive-transparency-text">
+                The sensitive attribute status is evaluated against the model's feature space.
+              </p>
+              <div class="clinical-callout-box">
+                <i class="fa-solid fa-circle-info callout-icon"></i>
+                <div>
+                  <strong>Model Feature Policy:</strong>
+                  <p>
+                    Omitting protected variables (e.g. race or gender) does not automatically prevent algorithmic bias due to correlation proxies (e.g. zip code, clinical comorbidities, insurance type).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clinical Non-Causality Card -->
+          <div class="dash-card clinical-context-card">
+            <div class="cm-card-header">
+              <div>
+                <h4 class="diagnostic-card-title">Clinical Interpretation & Non-Causality</h4>
+                <p class="diagnostic-card-sub">Distinguishing correlation from medical etiology</p>
+              </div>
+              <div class="card-icon-wrap emerald">
+                <i class="fa-solid fa-stethoscope"></i>
+              </div>
+            </div>
+            <div class="clinical-context-content">
+              <p>
+                SHAP feature attributions reflect statistical associations within this trained classifier. <strong>They do not establish biological or clinical causation.</strong>
+              </p>
+              <div class="clinical-callout-box">
+                <i class="fa-solid fa-triangle-exclamation callout-icon"></i>
+                <div>
+                  <strong>Fairness vs Explainability:</strong>
+                  <p>
+                    SHAP explains how the algorithm arrived at its prediction, but it does not prove why demographic disparities exist. Fairness must always be evaluated using rigorous group disparity metrics (e.g. DPD, Equal Opportunity, Underdiagnosis FNR).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- 5. Proceed to Recommendations CTA -->
+        <div class="dash-card proceed-phase-card">
+          <div class="proceed-card-content">
+            <div class="proceed-icon-circle">
+              <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <div>
+              <h4 class="proceed-title">Explainability & Feature Attributions Complete</h4>
+              <p class="proceed-desc" id="explain-proceed-desc">
+                Global and patient-level SHAP values computed. Proceed to AI Recommendations to review bias mitigation strategies and clinical governance insights.
+              </p>
+            </div>
+          </div>
+          <button id="btn-proceed-recommendations" class="btn btn-primary btn-lg" onclick="switchDashSection('recommendations');">
+            <span>Proceed to AI Recommendations</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         SECTION 6: AI INSIGHTS & RECOMMENDATIONS (PHASE 6)
+    =========================================== -->
+    <div id="section-recommendations" class="dash-section" style="display: none;">
+      
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div>
+          <div class="breadcrumb-nav">
+            <span onclick="switchDashSection('dashboard');" class="breadcrumb-link">Dashboard</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span onclick="switchDashSection('model');" class="breadcrumb-link">ML Model</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span onclick="switchDashSection('fairness');" class="breadcrumb-link">Fairness</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span onclick="switchDashSection('explain');" class="breadcrumb-link">Explainable AI</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span class="breadcrumb-current">AI Insights & Recommendations</span>
+          </div>
+          <h1 class="header-title">AI Insights & Recommendations</h1>
+          <p class="header-subtitle">Translate model, fairness, and explainability results into understandable findings and actionable next steps.</p>
+        </div>
+        <div class="header-badge">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <span>Step 5: Clinical Governance</span>
+        </div>
+      </header>
+
+      <!-- Empty State before Complete Analysis -->
+      <div id="insights-empty-state" class="dash-card empty-state-card" style="display: none;">
+        <div class="empty-icon-circle">
+          <i class="fa-solid fa-clipboard-list"></i>
+        </div>
+        <h4 class="empty-title">No Analysis Results Available</h4>
+        <p class="empty-desc">
+          Generating AI Insights requires model performance evaluation, fairness disparity calculations, and SHAP explainability.
+        </p>
+        <button class="btn btn-primary" onclick="switchDashSection('model');">
+          <i class="fa-solid fa-brain"></i>
+          Go to ML Model Section
+        </button>
+      </div>
+
+      <!-- Main Insights Container -->
+      <div id="insights-content-area">
+
+        <!-- 1. Primary Most Important Finding Banner -->
+        <section class="key-finding-section">
+          <div class="dash-card key-finding-card" id="key-finding-container">
+            <div class="key-finding-header">
+              <div class="key-finding-badge-wrap">
+                <span class="status-pill warning" id="key-finding-severity-pill">WARNING</span>
+                <span class="key-finding-tag"><i class="fa-solid fa-triangle-exclamation"></i> Most Important Finding</span>
+              </div>
+              <span class="preview-badge" id="key-finding-category">Fairness Disparity</span>
+            </div>
+
+            <div class="key-finding-body">
+              <h3 class="key-finding-title" id="key-finding-title">Underdiagnosis Disparity Detected</h3>
+              <p class="key-finding-desc" id="key-finding-desc">
+                Evaluating model metrics against established clinical AI screening thresholds.
+              </p>
+
+              <div class="key-finding-evidence-grid" id="key-finding-evidence-grid">
+                <!-- Dynamically populated evidence badges -->
+              </div>
+            </div>
+
+            <div class="key-finding-action-row">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              <span><strong>Recommended Action:</strong> <span id="key-finding-action-text">Investigate subgroup error patterns.</span></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Overall Analysis Summary Grid -->
+        <section class="analysis-summary-section">
+          <div class="section-title-wrap">
+            <h3 class="section-heading">Analysis Summary</h3>
+            <p class="section-subtext">Deterministic synthesis of model performance, demographic fairness, and feature influences</p>
+          </div>
+
+          <div class="summary-cards-grid summary-insights-grid">
+            <div class="dash-card status-card">
+              <div class="card-icon-wrap mint">
+                <i class="fa-solid fa-brain"></i>
+              </div>
+              <div class="status-card-content">
+                <div class="status-label">Model Performance</div>
+                <div class="status-value-small" id="sum-model-text">Strong Baseline Performance</div>
+                <span class="status-pill ready" id="sum-model-pill">Evaluated</span>
+              </div>
+            </div>
+
+            <div class="dash-card status-card">
+              <div class="card-icon-wrap emerald">
+                <i class="fa-solid fa-scale-balanced"></i>
+              </div>
+              <div class="status-card-content">
+                <div class="status-label">Fairness Status</div>
+                <div class="status-value-small" id="sum-fairness-text">Moderate Disparity Identified</div>
+                <span class="status-pill warning" id="sum-fairness-pill">Review Triggered</span>
+              </div>
+            </div>
+
+            <div class="dash-card status-card">
+              <div class="card-icon-wrap mint">
+                <i class="fa-solid fa-lightbulb"></i>
+              </div>
+              <div class="status-card-content">
+                <div class="status-label">Explainability (SHAP)</div>
+                <div class="status-value-small" id="sum-explain-text">Feature-level SHAP unavailable</div>
+                <span class="status-pill pending" id="sum-explain-pill">External model internals not provided</span>
+              </div>
+            </div>
+
+            <div class="dash-card status-card">
+              <div class="card-icon-wrap mint">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <div class="status-card-content">
+                <div class="status-label">Governance Severity</div>
+                <div class="status-value-small" id="sum-severity-text">WARNING</div>
+                <span class="status-pill warning" id="sum-severity-pill">Action Advised</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Categorized Evidence-Based Findings -->
+        <section class="findings-breakdown-section">
+          <div class="section-title-wrap">
+            <h3 class="section-heading">Detailed Evidence-Based Findings</h3>
+            <p class="section-subtext">Traceable findings derived strictly from computed evaluation metrics</p>
+          </div>
+
+          <div class="findings-cards-grid">
+            
+            <!-- Fairness Findings Card -->
+            <div class="dash-card finding-group-card">
+              <div class="cm-card-header">
+                <div>
+                  <h4 class="diagnostic-card-title"><i class="fa-solid fa-scale-unbalanced-flip"></i> Fairness & Disparity Findings</h4>
+                  <p class="diagnostic-card-sub">Screening threshold comparisons across protected groups</p>
+                </div>
+              </div>
+              <div class="findings-list" id="fairness-findings-list">
+                <!-- Dynamically populated fairness finding items -->
+              </div>
+            </div>
+
+            <!-- Model Performance Findings Card -->
+            <div class="dash-card finding-group-card">
+              <div class="cm-card-header">
+                <div>
+                  <h4 class="diagnostic-card-title"><i class="fa-solid fa-chart-line"></i> Model Performance & Error Findings</h4>
+                  <p class="diagnostic-card-sub">Discrimination accuracy, recall-precision gaps, and diagnostic sensitivity</p>
+                </div>
+              </div>
+              <div class="findings-list" id="performance-findings-list">
+                <!-- Dynamically populated performance finding items -->
+              </div>
+            </div>
+
+            <!-- Subgroup & Cohort Differences Card -->
+            <div class="dash-card finding-group-card">
+              <div class="cm-card-header">
+                <div>
+                  <h4 class="diagnostic-card-title"><i class="fa-solid fa-users-rectangle"></i> Subgroup Diagnostics & Reliability</h4>
+                  <p class="diagnostic-card-sub">Inter-group sensitivity spreads and sample representation limitations</p>
+                </div>
+              </div>
+              <div class="findings-list" id="subgroup-findings-list">
+                <!-- Dynamically populated subgroup finding items -->
+              </div>
+            </div>
+
+            <!-- Explainability Context Card -->
+            <div class="dash-card finding-group-card">
+              <div class="cm-card-header">
+                <div>
+                  <h4 class="diagnostic-card-title"><i class="fa-solid fa-lightbulb"></i> Explainability & Feature Reliance</h4>
+                  <p class="diagnostic-card-sub">SHAP attributions and protected attribute usage in feature space</p>
+                </div>
+              </div>
+              <div class="findings-list" id="explainability-findings-list">
+                <!-- Dynamically populated explainability finding items -->
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 4. Actionable Recommendations Section -->
+        <section class="recommendations-section">
+          <div class="section-title-wrap">
+            <h3 class="section-heading">Actionable AI Governance Recommendations</h3>
+            <p class="section-subtext">Concrete, transparent steps directly linked to observed disparity and performance signals</p>
+          </div>
+
+          <div class="recommendations-grid" id="recommendations-container">
+            <!-- Dynamically populated recommendation cards -->
+          </div>
+        </section>
+
+        <!-- 5. Screening Thresholds & Clinical Disclaimers -->
+        <section class="xai-context-grid">
+          
+          <div class="dash-card clinical-context-card">
+            <div class="cm-card-header">
+              <div>
+                <h4 class="diagnostic-card-title">Project Screening Thresholds Reference</h4>
+                <p class="diagnostic-card-sub">Screening criteria for algorithmic auditing</p>
+              </div>
+              <div class="card-icon-wrap mint">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+            </div>
+            <div class="clinical-context-content">
+              <ul class="thresholds-reference-list">
+                <li><strong>Demographic Parity Diff (DPD):</strong> ≤ 0.05</li>
+                <li><strong>Disparate Impact Ratio (DIR):</strong> 0.80 – 1.25 (80% Rule)</li>
+                <li><strong>Equal Opportunity Diff (EOpD):</strong> ≤ 0.05</li>
+                <li><strong>Equalized Odds Diff (EOD):</strong> ≤ 0.05</li>
+                <li><strong>Underdiagnosis Disparity (FNR):</strong> ≤ 0.05</li>
+              </ul>
+              <p class="disclaimer-subtext">
+                These thresholds serve as project screening triggers to prioritize auditing and are not universal regulatory or clinical mandates.
+              </p>
+            </div>
+          </div>
+
+          <div class="dash-card clinical-context-card">
+            <div class="cm-card-header">
+              <div>
+                <h4 class="diagnostic-card-title">Transparent Language & Governance Standard</h4>
+                <p class="diagnostic-card-sub">Evidence-based interpretation principles</p>
+              </div>
+              <div class="card-icon-wrap emerald">
+                <i class="fa-solid fa-shield-heart"></i>
+              </div>
+            </div>
+            <div class="clinical-context-content">
+              <div class="clinical-callout-box">
+                <i class="fa-solid fa-circle-check callout-icon"></i>
+                <div>
+                  <strong>Statistical Finding vs Clinical Judgment:</strong>
+                  <p>
+                    All findings and recommendations reflect mathematical evaluation of the provided dataset and model. They identify potential disparity risks and inform clinical validation without replacing professional human oversight.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- 6. Final CTA: Proceed to Report -->
+        <div class="dash-card proceed-phase-card">
+          <div class="proceed-card-content">
+            <div class="proceed-icon-circle">
+              <i class="fa-solid fa-file-pdf"></i>
+            </div>
+            <div>
+              <h4 class="proceed-title">Insights & Recommendations Ready</h4>
+              <p class="proceed-desc" id="insights-proceed-desc">
+                All model diagnostics, fairness audits, explainability attributions, and actionable recommendations have been compiled.
+              </p>
+            </div>
+          </div>
+          <div class="insights-proceed-actions" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <button id="btn-save-analysis-insights" class="btn btn-secondary btn-lg" onclick="saveCurrentAnalysisToHistory();">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>Save Analysis</span>
+            </button>
+            <button id="btn-proceed-mitigation" class="btn btn-secondary btn-lg" onclick="switchDashSection('mitigation');">
+              <i class="fa-solid fa-sliders"></i>
+              <span>Explore Mitigation</span>
+            </button>
+            <button id="btn-proceed-report" class="btn btn-primary btn-lg" onclick="switchDashSection('reports');">
+              <span>Continue to Report</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         SECTION: FAIRNESS MITIGATION (PHASE 9)
+    =========================================== -->
+    <div id="section-mitigation" class="dash-section" style="display: none;">
+      
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div>
+          <div class="breadcrumb-nav">
+            <span onclick="switchDashSection('dashboard');" class="breadcrumb-link">Dashboard</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span onclick="switchDashSection('fairness');" class="breadcrumb-link">Fairness Analysis</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span onclick="switchDashSection('recommendations');" class="breadcrumb-link">Recommendations</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span class="breadcrumb-current">Fairness Mitigation</span>
+          </div>
+          <h1 class="header-title">Fairness Mitigation</h1>
+          <p class="header-subtitle">Test a candidate mitigation strategy and compare model performance and fairness before and after.</p>
+        </div>
+        <div class="header-badge" style="background: rgba(245, 158, 11, 0.1); color: #D97706; border-color: rgba(245, 158, 11, 0.3);">
+          <i class="fa-solid fa-flask-vial"></i>
+          <span>Advanced / Experimental</span>
+        </div>
+      </header>
+
+      <!-- Experimental Notice Banner -->
+      <div class="mitigation-notice-banner">
+        <div class="mitigation-banner-icon">
+          <i class="fa-solid fa-sliders"></i>
+        </div>
+        <div class="mitigation-banner-text">
+          <div class="mitigation-banner-title">Advanced Feature: Decision Boundary Calibration</div>
+          <p class="mitigation-banner-desc">
+            Mitigation evaluates candidate classification decision thresholds on model probabilities to explore empirical trade-offs between predictive performance and demographic fairness.
+            <strong>The baseline model and original evaluation results remain completely unchanged.</strong>
+            Mitigation does not promise to "remove bias"; candidate models require independent prospective clinical validation.
+          </p>
+        </div>
+      </div>
+
+      <!-- External Audit Missing Probabilities Banner -->
+      <div id="ext-mitigation-disabled-banner" class="dash-card" style="display: none; background: #FEF2F2; border: 1.5px solid #FECACA; margin-bottom: 20px; padding: 18px 22px; border-radius: 10px;">
+        <div style="display: flex; gap: 14px; align-items: flex-start;">
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: #FEE2E2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fa-solid fa-ban" style="color: #DC2626; font-size: 18px;"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+              <h3 style="font-size: 15px; font-weight: 700; color: #991B1B; margin: 0;">Decision Threshold Calibration Disabled</h3>
+              <span style="font-size: 10px; font-weight: 700; background: #FEE2E2; color: #B91C1C; padding: 2px 6px; border-radius: 4px; text-transform: uppercase;">y_prob Unavailable</span>
+            </div>
+            <p style="font-size: 13px; color: #B91C1C; margin: 0; line-height: 1.5;">
+              Decision Threshold Calibration requires continuous probability scores (y_prob). Only discrete predictions were supplied.
+              To calibrate decision boundaries and test empirical trade-offs, re-evaluate your external model with continuous risk probabilities (p in [0.0, 1.0]).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prerequisite State Box (shown if model/fairness not yet ready) -->
+      <div id="mitigation-prereq-card" class="dash-card mitigation-prereq-box" style="display: block;">
+        <div class="prereq-icon-wrap">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div class="prereq-content">
+          <h3 class="prereq-title">Prerequisite Analysis Required</h3>
+          <p class="prereq-desc">
+            Fairness mitigation requires a trained clinical model with continuous probability outputs and computed subgroup fairness metrics.
+            Please complete Model Training (Phase 3) and Fairness Analysis (Phase 4) first.
+          </p>
+          <div class="prereq-actions">
+            <button class="btn btn-primary btn-sm" onclick="switchDashSection('model');">Go to ML Model</button>
+            <button class="btn btn-secondary btn-sm" onclick="switchDashSection('fairness');">Go to Fairness Analysis</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mitigation Workspace (Shown when ready) -->
+      <div id="mitigation-workspace" style="display: none;">
+
+        <!-- 1. Baseline Reference Summary Card -->
+        <section class="dash-card mitigation-baseline-summary-card">
+          <div class="cm-card-header">
+            <div>
+              <span class="badge-status-neutral">Reference Baseline</span>
+              <h3 class="diagnostic-card-title" id="mit-baseline-model-title">Original Model Performance & Fairness</h3>
+              <p class="diagnostic-card-sub" id="mit-baseline-subtext">Baseline evaluation at operational classification decision threshold (θ = 0.50)</p>
+            </div>
+            <div class="card-icon-wrap mint">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+          </div>
+
+          <div class="mitigation-baseline-metrics-grid">
+            <div class="mit-metric-item">
+              <span class="mit-metric-label">Model Architecture</span>
+              <span class="mit-metric-val" id="mit-base-model-type">—</span>
+            </div>
+            <div class="mit-metric-item">
+              <span class="mit-metric-label">Baseline Threshold</span>
+              <span class="mit-metric-val" id="mit-base-threshold-val">θ = 0.50</span>
+            </div>
+            <div class="mit-metric-item">
+              <span class="mit-metric-label">Accuracy</span>
+              <span class="mit-metric-val" id="mit-base-acc">—</span>
+            </div>
+            <div class="mit-metric-item">
+              <span class="mit-metric-label">Balanced Accuracy</span>
+              <span class="mit-metric-val" id="mit-base-bal-acc">—</span>
+            </div>
+            <div class="mit-metric-item">
+              <span class="mit-metric-label">F1 Score</span>
+              <span class="mit-metric-val" id="mit-base-f1">—</span>
+            </div>
+            <div class="mit-metric-item">
+              <span class="mit-metric-label">Fairness Verdict</span>
+              <span class="mit-metric-val" id="mit-base-verdict">—</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Mitigation Strategy Configuration Card -->
+        <section class="dash-card mitigation-config-card">
+          <div class="cm-card-header">
+            <div>
+              <h3 class="diagnostic-card-title">Mitigation Strategy Configuration</h3>
+              <p class="diagnostic-card-sub">Configure candidate decision threshold search and acceptable performance tolerance</p>
+            </div>
+            <div class="card-icon-wrap emerald">
+              <i class="fa-solid fa-gear"></i>
+            </div>
+          </div>
+
+          <div class="mitigation-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="mit-strategy-select">Mitigation Strategy</label>
+              <select id="mit-strategy-select" class="form-select">
+                <option value="threshold_adjustment" selected>Decision Threshold Adjustment (Post-Processing)</option>
+              </select>
+              <span class="form-help">Evaluates alternative decision cut-offs on model probability scores.</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="mit-objective-select">Mitigation Objective</label>
+              <select id="mit-objective-select" class="form-select">
+                <option value="balance_fairness_performance" selected>Balance Fairness and Performance</option>
+                <option value="improve_fairness">Improve Fairness (Aggressive Parity Priority)</option>
+              </select>
+              <span class="form-help">Optimizes candidate ranking with documented performance penalty weight.</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="mit-target-metric-select">Target Fairness Metric</label>
+              <select id="mit-target-metric-select" class="form-select">
+                <option value="all" selected>All Metrics (Composite Fairness)</option>
+                <option value="fnr_disparity">False Negative Rate (Underdiagnosis Disparity)</option>
+                <option value="dpd">Demographic Parity Difference (DPD)</option>
+                <option value="eopd">Equal Opportunity Difference (EOpD)</option>
+                <option value="eod">Equalized Odds Difference (EOD)</option>
+                <option value="dir">Disparate Impact Ratio (DIR)</option>
+              </select>
+              <span class="form-help">Specific disparity metric prioritized in candidate selection scoring.</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="mit-max-perf-drop">Maximum Permitted Performance Reduction</label>
+              <select id="mit-max-perf-drop" class="form-select">
+                <option value="0.03">3.0 percentage points (Strict Preservation)</option>
+                <option value="0.05" selected>5.0 percentage points (Standard Clinical Tolerance)</option>
+                <option value="0.08">8.0 percentage points (Moderate Tolerance)</option>
+                <option value="0.10">10.0 percentage points (Wide Search Range)</option>
+              </select>
+              <span class="form-help">Maximum allowable decrease in Balanced Accuracy before candidate disqualification.</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Candidate Threshold Range</label>
+              <div class="range-inputs-flex">
+                <div>
+                  <span class="range-sublabel">Min:</span>
+                  <input type="number" id="mit-th-min" class="form-control form-control-sm" value="0.20" min="0.05" max="0.50" step="0.05" />
+                </div>
+                <div>
+                  <span class="range-sublabel">Max:</span>
+                  <input type="number" id="mit-th-max" class="form-control form-control-sm" value="0.80" min="0.50" max="0.95" step="0.05" />
+                </div>
+                <div>
+                  <span class="range-sublabel">Step:</span>
+                  <input type="number" id="mit-th-step" class="form-control form-control-sm" value="0.05" min="0.01" max="0.20" step="0.01" />
+                </div>
+              </div>
+              <span class="form-help">Range of probability thresholds evaluated for candidates.</span>
+            </div>
+          </div>
+
+          <div class="mitigation-form-actions">
+            <button id="btn-evaluate-mitigation" class="btn btn-primary btn-lg" onclick="triggerMitigationEvaluation();">
+              <i class="fa-solid fa-sliders"></i>
+              <span>Evaluate Mitigation Candidates</span>
+            </button>
+            <button class="btn btn-secondary" onclick="resetMitigationConfig();">
+              <i class="fa-solid fa-rotate-left"></i>
+              <span>Reset to Defaults</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 3. Candidate Results Evaluation Table -->
+        <section id="mitigation-candidates-card" class="dash-card mitigation-candidates-card" style="display: none;">
+          <div class="cm-card-header">
+            <div>
+              <h3 class="diagnostic-card-title">Evaluated Candidate Thresholds</h3>
+              <p class="diagnostic-card-sub">Compare predictive performance vs fairness metrics across candidate thresholds</p>
+            </div>
+            <div id="mit-candidates-count-pill" class="badge-status-neutral">0 Candidates</div>
+          </div>
+
+          <div class="table-responsive mitigation-table-wrap" id="mitigation-candidates-table-wrap">
+            <!-- Dynamically populated via script.js -->
+          </div>
+        </section>
+
+        <!-- 4. Selected Candidate & Before / After Audit Comparison Card -->
+        <section id="mitigation-selected-card" class="dash-card mitigation-comparison-card" style="display: none;">
+          <div class="cm-card-header">
+            <div>
+              <span class="badge-status-selected">Selected Mitigation Candidate</span>
+              <h3 class="diagnostic-card-title" id="mit-selected-title">Decision Threshold Optimization (θ = —)</h3>
+              <p class="diagnostic-card-sub">Rigorous side-by-side Before vs After comparison across performance and demographic cohorts</p>
+            </div>
+            <div class="card-icon-wrap mint">
+              <i class="fa-solid fa-code-compare"></i>
+            </div>
+          </div>
+
+          <!-- Verdict & Trade-off Summary Callout -->
+          <div class="mitigation-verdict-callout" id="mitigation-verdict-box">
+            <div class="mit-verdict-badge" id="mit-verdict-badge-pill">Fairness Improved with Performance Trade-off</div>
+            <p class="mit-verdict-text" id="mit-verdict-summary-text">Loading comparison summary...</p>
+            <div class="mit-reliability-note" id="mit-verdict-reliability-note">
+              <i class="fa-solid fa-circle-info"></i>
+              <span id="mit-reliability-text">Subgroup size reliability: Standard evaluation (n ≥ 50).</span>
+            </div>
+          </div>
+
+          <!-- Side-by-Side Performance Comparison -->
+          <div class="mit-comparison-section">
+            <h4 class="mit-subheading">1. Predictive Performance Trade-off Comparison</h4>
+            <div class="table-responsive" id="mit-perf-comparison-table-wrap">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Side-by-Side Fairness Metrics Comparison -->
+          <div class="mit-comparison-section">
+            <h4 class="mit-subheading">2. Algorithmic Fairness & Bias Disparities (Screening Metrics)</h4>
+            <div class="table-responsive" id="mit-fair-comparison-table-wrap">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Demographic Subgroups Comparison -->
+          <div class="mit-comparison-section">
+            <h4 class="mit-subheading">3. Protected Demographic Subgroup Rates Comparison</h4>
+            <div class="table-responsive" id="mit-subgroup-comparison-table-wrap">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Clinical Governance & Non-Causal Notice -->
+          <div class="clinical-callout-box" style="margin-top: 20px;">
+            <i class="fa-solid fa-shield-heart callout-icon"></i>
+            <div>
+              <strong>Clinical Governance & Safety Interpretation:</strong>
+              <p>
+                Decision threshold calibration modifies the operational sensitivity and specificity cut-point of the classifier.
+                While it can reduce statistical disparity metrics within the evaluation sample, it does not guarantee that underlying algorithmic bias is eliminated.
+                Candidate models should be subjected to prospective clinical calibration and institutional oversight.
+              </p>
+            </div>
+          </div>
+
+          <!-- Post-Mitigation Actions -->
+          <div class="mitigation-footer-actions">
+            <button class="btn btn-secondary btn-lg" onclick="saveCurrentAnalysisToHistory();">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>Save Mitigated Analysis</span>
+            </button>
+            <button class="btn btn-primary btn-lg" onclick="switchDashSection('reports');">
+              <i class="fa-solid fa-file-pdf"></i>
+              <span>Continue to Report Generation</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         SECTION 7: FAIRNESS REPORTS (PHASE 7)
+    =========================================== -->
+    <div id="section-reports" class="dash-section" style="display: none;">
+      
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div>
+          <div class="breadcrumb-nav">
+            <span onclick="switchDashSection('dashboard');" class="breadcrumb-link">Dashboard</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span onclick="switchDashSection('recommendations');" class="breadcrumb-link">Insights & Recommendations</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span class="breadcrumb-current">Fairness Reports</span>
+          </div>
+          <h1 class="header-title">Fairness Reports</h1>
+          <p class="header-subtitle">Generate and export an audit-ready clinical AI evaluation report in PDF format.</p>
+        </div>
+        <div class="header-badge">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>Step 6: Audit Export</span>
+        </div>
+      </header>
+
+      <!-- Main Report Container -->
+      <div id="reports-content-area">
+
+        <!-- 1. Report Readiness & Configuration Card -->
+        <section class="report-readiness-section">
+          <div class="dash-card report-card">
+            <div class="report-card-header">
+              <div>
+                <h3 class="diagnostic-card-title">Audit Report Configuration</h3>
+                <p class="diagnostic-card-sub">Review completed pipeline artifacts ready for compilation</p>
+              </div>
+              <span class="status-pill ready" id="report-readiness-pill">Ready to Generate</span>
+            </div>
+
+            <div class="report-checklist-grid">
+              <div class="checklist-item" id="check-dataset">
+                <i class="fa-solid fa-circle-check check-icon ready"></i>
+                <div class="check-text">
+                  <strong>Healthcare Dataset</strong>
+                  <span id="report-check-dataset-sub">Validated & Preprocessed</span>
+                </div>
+              </div>
+              <div class="checklist-item" id="check-model">
+                <i class="fa-solid fa-circle-check check-icon ready"></i>
+                <div class="check-text">
+                  <strong>ML Model Artifact</strong>
+                  <span id="report-check-model-sub">Trained & Evaluated</span>
+                </div>
+              </div>
+              <div class="checklist-item" id="check-fairness">
+                <i class="fa-solid fa-circle-check check-icon ready"></i>
+                <div class="check-text">
+                  <strong>Fairness & Bias Audit</strong>
+                  <span id="report-check-fairness-sub">5 Disparity Metrics Evaluated</span>
+                </div>
+              </div>
+              <div class="checklist-item" id="check-shap">
+                <i class="fa-solid fa-circle-check check-icon ready"></i>
+                <div class="check-text">
+                  <strong>Explainable AI (SHAP)</strong>
+                  <span id="report-check-shap-sub">Global & Local Attributions</span>
+                </div>
+              </div>
+              <div class="checklist-item" id="check-insights">
+                <i class="fa-solid fa-circle-check check-icon ready"></i>
+                <div class="check-text">
+                  <strong>AI Insights & Governance</strong>
+                  <span id="report-check-insights-sub">Actionable Recommendations</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Generate Action Area -->
+            <div class="report-action-area">
+              <button id="btn-generate-pdf" class="btn btn-primary btn-lg" onclick="triggerReportGeneration();">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>Generate Fairness Report</span>
+              </button>
+              <button id="btn-save-analysis-report-cfg" class="btn btn-secondary btn-lg" onclick="saveCurrentAnalysisToHistory();">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span>Save to History</span>
+              </button>
+              <span class="report-format-hint">
+                <i class="fa-solid fa-shield-halved"></i> Includes Executive Summary, Visual Charts, Disparity Matrices, and Disclaimers
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Generated Report Download & Metadata Section -->
+        <section class="generated-report-section" id="generated-report-banner" style="display: none;">
+          <div class="dash-card report-ready-card">
+            <div class="report-ready-header">
+              <div class="report-icon-box">
+                <i class="fa-solid fa-file-circle-check"></i>
+              </div>
+              <div>
+                <h3 class="report-ready-title">Professional Report Compiled</h3>
+                <p class="report-ready-sub" id="report-ready-meta">Generated: — | File: asclepius_fairai_report.pdf</p>
+              </div>
+              <span class="status-pill ready">Compiled PDF</span>
+            </div>
+
+            <div class="report-ready-body">
+              <p>
+                Your audit-ready clinical fairness and explainability report has been created. The document contains complete tabular breakdowns, confusion matrix heatmaps, subgroup disparity charts, SHAP feature importance rankings, and governance recommendations.
+              </p>
+              <div class="report-download-actions">
+                <button id="btn-download-pdf" class="btn btn-primary btn-lg" onclick="downloadGeneratedReport();">
+                  <i class="fa-solid fa-download"></i>
+                  <span>Download PDF Report</span>
+                </button>
+                <button id="btn-save-analysis-report-done" class="btn btn-secondary btn-lg" onclick="saveCurrentAnalysisToHistory();">
+                  <i class="fa-solid fa-floppy-disk"></i>
+                  <span>Save to History</span>
+                </button>
+                <button class="btn btn-secondary btn-lg" onclick="window.print();">
+                  <i class="fa-solid fa-print"></i>
+                  <span>Print Summary</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Report Contents Preview Outline -->
+        <section class="report-preview-outline-section">
+          <div class="section-title-wrap">
+            <h3 class="section-heading">Report Document Structure</h3>
+            <p class="section-subtext">The generated PDF complies with academic, audit, and clinical AI governance documentation standards</p>
+          </div>
+
+          <div class="report-sections-outline-grid">
+            <div class="dash-card outline-card">
+              <div class="outline-badge">Section 1–2</div>
+              <h4 class="outline-title">Executive Summary & Data Architecture</h4>
+              <p class="outline-desc">Overview tables, cohort metadata, feature preprocessing pipelines, and zero-leakage split details.</p>
+            </div>
+
+            <div class="dash-card outline-card">
+              <div class="outline-badge">Section 3–4</div>
+              <h4 class="outline-title">Model Diagnostics & Fairness Auditing</h4>
+              <p class="outline-desc">Confusion matrix heatmaps, discrimination metrics, 5 core disparity metrics against screening thresholds.</p>
+            </div>
+
+            <div class="dash-card outline-card">
+              <div class="outline-badge">Section 5–6</div>
+              <h4 class="outline-title">Subgroups & SHAP Explainability</h4>
+              <p class="outline-desc">Sensitivity spreads, sample reliability alerts ($n < 30$), and Shapley feature attribution rankings.</p>
+            </div>
+
+            <div class="dash-card outline-card">
+              <div class="outline-badge">Section 7–9</div>
+              <h4 class="outline-title">Governance & Clinical Disclaimers</h4>
+              <p class="outline-desc">Actionable recommendations, non-causality notices, no-PHI verification, and final audit sign-off.</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         SECTION 8: ANALYSIS HISTORY (PHASE 8)
+    =========================================== -->
+    <div id="section-history" class="dash-section" style="display: none;">
+      
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div>
+          <div class="breadcrumb-nav">
+            <span onclick="switchDashSection('dashboard');" class="breadcrumb-link">Dashboard</span>
+            <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+            <span class="breadcrumb-current">Analysis History</span>
+          </div>
+          <h1 class="header-title">Analysis History</h1>
+          <p class="header-subtitle">Review previous fairness evaluations and generated reports.</p>
+        </div>
+        <div class="header-badge">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Persistent Audit Log</span>
+        </div>
+      </header>
+
+      <!-- History Summary Statistics Area -->
+      <section class="history-stats-grid">
+        <div class="dash-card history-stat-card">
+          <div class="hist-stat-icon mint">
+            <i class="fa-solid fa-folder-closed"></i>
+          </div>
+          <div class="hist-stat-content">
+            <div class="hist-stat-label">Total Analyses</div>
+            <div class="hist-stat-val" id="hist-total-val">0</div>
+            <div class="hist-stat-sub">Persisted in SQLite</div>
+          </div>
+        </div>
+
+        <div class="dash-card history-stat-card">
+          <div class="hist-stat-icon emerald">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <div class="hist-stat-content">
+            <div class="hist-stat-label">Fair / Balanced</div>
+            <div class="hist-stat-val" id="hist-fair-val">0</div>
+            <div class="hist-stat-sub">Met all thresholds</div>
+          </div>
+        </div>
+
+        <div class="dash-card history-stat-card">
+          <div class="hist-stat-icon warning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <div class="hist-stat-content">
+            <div class="hist-stat-label">Moderate Disparity</div>
+            <div class="hist-stat-val" id="hist-mod-val">0</div>
+            <div class="hist-stat-sub">Review recommended</div>
+          </div>
+        </div>
+
+        <div class="dash-card history-stat-card">
+          <div class="hist-stat-icon danger">
+            <i class="fa-solid fa-circle-exclamation"></i>
+          </div>
+          <div class="hist-stat-content">
+            <div class="hist-stat-label">Significant Disparity</div>
+            <div class="hist-stat-val" id="hist-sig-val">0</div>
+            <div class="hist-stat-sub">Action required</div>
+          </div>
+        </div>
+
+        <div class="dash-card history-stat-card">
+          <div class="hist-stat-icon purple">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="hist-stat-content">
+            <div class="hist-stat-label">Insufficient Evidence</div>
+            <div class="hist-stat-val" id="hist-insuf-val">0</div>
+            <div class="hist-stat-sub">Small cohort (n &lt; 30)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Privacy & Compliance Notice Banner -->
+      <div class="history-privacy-banner">
+        <div class="privacy-icon-box">
+          <i class="fa-solid fa-shield-heart"></i>
+        </div>
+        <div class="privacy-text-box">
+          <strong>Data Privacy Safeguard:</strong> Analysis history stores summarized evaluation results, not patient-level healthcare records. No individual patient PHI or raw observations are persisted.
+        </div>
+      </div>
+
+      <!-- History Table & Filter Section -->
+      <section class="dash-card history-main-card">
+        <div class="history-card-header">
+          <div>
+            <h3 class="diagnostic-card-title">Historical Evaluation Records</h3>
+            <p class="diagnostic-card-sub">Filter, inspect, and export previous clinical fairness evaluations</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="fetchAndRenderHistory();">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Refresh</span>
+          </button>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="history-controls-bar">
+          <div class="history-search-wrap">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="hist-search-input" class="hist-search-field" placeholder="Search by dataset, target, sensitive attribute, or ID..." oninput="handleHistoryFilterChange();" />
+          </div>
+
+          <div class="history-filters-wrap">
+            <select id="hist-filter-model" class="hist-select" onchange="handleHistoryFilterChange();">
+              <option value="all">All Models</option>
+              <option value="Random Forest">Random Forest</option>
+              <option value="Logistic Regression">Logistic Regression</option>
+              <option value="Gradient Boosting">Gradient Boosting</option>
+            </select>
+
+            <select id="hist-filter-status" class="hist-select" onchange="handleHistoryFilterChange();">
+              <option value="all">All Fairness Statuses</option>
+              <option value="fair">Fair / Balanced</option>
+              <option value="moderate">Moderate Disparity</option>
+              <option value="significant">Significant Disparity</option>
+              <option value="insufficient">Insufficient Evidence</option>
+            </select>
+
+            <select id="hist-sort-order" class="hist-select" onchange="handleHistoryFilterChange();">
+              <option value="date_desc">Newest First</option>
+              <option value="date_asc">Oldest First</option>
+              <option value="accuracy_desc">Highest Accuracy</option>
+              <option value="fairness_status">Fairness Status</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- History Records Table / Cards Container -->
+        <div class="history-table-responsive" id="history-table-container">
+          <!-- Dynamically populated via script.js -->
+          <div class="history-empty-container">
+            <div class="empty-icon-circle">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <h4 class="empty-title">Loading history records...</h4>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- ==========================================
+         HISTORY DETAIL MODAL (PHASE 8)
+    =========================================== -->
+    <div id="history-detail-modal" class="history-modal-overlay" style="display: none;">
+      <div class="history-modal-card">
+        <div class="history-modal-header">
+          <div>
+            <div class="modal-badge-id" id="modal-analysis-id">ANL-20260904-XXXX</div>
+            <h3 class="modal-title" id="modal-dataset-title">Analysis Summary</h3>
+            <p class="modal-subtitle" id="modal-created-date">Created on: —</p>
+          </div>
+          <button class="modal-close-btn" onclick="closeHistoryDetailModal();" aria-label="Close modal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="history-modal-body" id="modal-detail-content">
+          <!-- Dynamically populated via script.js -->
+        </div>
+
+        <div class="history-modal-footer">
+          <div id="modal-report-action-wrap">
+            <!-- Dynamic button -->
+          </div>
+          <button class="btn btn-secondary" onclick="closeHistoryDetailModal();">Close Summary</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>

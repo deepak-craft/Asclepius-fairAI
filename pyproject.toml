@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "asclepius-fairai"
+version = "1.0.0"
+description = "Asclepius FairAI - Healthcare AI Algorithmic Fairness, Explainability & Clinical Safety Audit Engine"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Asclepius FairAI Team" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.scripts]
+asclepius = "src.asclepius.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "asclepius*"]

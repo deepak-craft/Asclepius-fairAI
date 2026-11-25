@@ -1,0 +1,301 @@
+<div class="container">
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <span>Asclepius</span> FairAI
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="#home" class="btn-back-home" onclick="switchView('home'); return false;">Home</a></li>
+            <li><a href="#dashboard" class="btn-get-started" onclick="switchView('dashboard'); return false;">Dashboard</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+
+    </nav>
+
+
+    <!-- =========================
+         HERO SECTION
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <!-- LEFT: TEXT -->
+
+            <div class="hero-text">
+
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    <span>AI-Powered Healthcare Intelligence</span>
+                </div>
+
+                <h1 class="hero-title">
+                    AI Powered<br>
+                    <span>Healthcare</span><br>
+                    Fairness Platform
+                </h1>
+
+                <p class="hero-subtitle">
+                    Detect healthcare bias, evaluate fairness,
+                    train AI models, explain predictions using SHAP,
+                    and generate professional reports from one dashboard.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="#dashboard" class="btn btn-primary btn-get-started" onclick="switchView('dashboard'); return false;">
+                        Get Started
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                    <a href="#features" class="btn btn-secondary">
+                        Learn More
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT: IMAGE -->
+
+            <div class="hero-visual">
+
+                <img
+                    src="{{HERO_IMAGE}}"
+                    alt="Asclepius FairAI Healthcare AI"
+                    class="hero-image"
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================== -->
+
+    <section class="stats">
+
+        <div class="glass-card stat-card">
+
+            <div class="stat-number">
+                15+
+            </div>
+
+            <div class="stat-title">
+                Fairness Metrics
+            </div>
+
+        </div>
+
+
+        <div class="glass-card stat-card">
+
+            <div class="stat-number">
+                98%
+            </div>
+
+            <div class="stat-title">
+                Model Accuracy
+            </div>
+
+        </div>
+
+
+        <div class="glass-card stat-card">
+
+            <div class="stat-number">
+                50K
+            </div>
+
+            <div class="stat-title">
+                Predictions
+            </div>
+
+        </div>
+
+
+        <div class="glass-card stat-card">
+
+            <div class="stat-number">
+                24/7
+            </div>
+
+            <div class="stat-title">
+                Monitoring
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FEATURES
+    ========================== -->
+
+    <section class="features">
+
+        <h2>
+            Platform Features
+        </h2>
+
+
+        <div class="feature-grid">
+
+
+            <!-- FEATURE 1 -->
+
+            <div class="glass-card" onclick="switchView('dashboard'); switchDashSection('dataset'); return false;" style="cursor: pointer;">
+
+                <div class="feature-icon">
+                    <i class="fa-solid fa-upload"></i>
+                </div>
+
+                <h3 class="feature-title">
+                    Upload Dataset
+                </h3>
+
+                <p class="feature-text">
+                    Upload healthcare datasets for preprocessing,
+                    training and fairness analysis.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 2 -->
+
+            <div class="glass-card">
+
+                <div class="feature-icon">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+
+                <h3 class="feature-title">
+                    Machine Learning
+                </h3>
+
+                <p class="feature-text">
+                    Train classification models
+                    and evaluate healthcare predictions.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 3 -->
+
+            <div class="glass-card">
+
+                <div class="feature-icon">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+
+                <h3 class="feature-title">
+                    Fairness Analysis
+                </h3>
+
+                <p class="feature-text">
+                    Measure demographic parity,
+                    equal opportunity and fairness metrics.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 4 -->
+
+            <div class="glass-card">
+
+                <div class="feature-icon">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i>
+                </div>
+
+                <h3 class="feature-title">
+                    Bias Detection
+                </h3>
+
+                <p class="feature-text">
+                    Identify protected groups
+                    affected by algorithmic bias.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 5 -->
+
+            <div class="glass-card">
+
+                <div class="feature-icon">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+
+                <h3 class="feature-title">
+                    Explainable AI
+                </h3>
+
+                <p class="feature-text">
+                    Visualize predictions
+                    using SHAP explainability.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 6 -->
+
+            <div class="glass-card">
+
+                <div class="feature-icon">
+                    <i class="fa-solid fa-file-lines"></i>
+                </div>
+
+                <h3 class="feature-title">
+                    Reports
+                </h3>
+
+                <p class="feature-text">
+                    Export professional AI
+                    fairness reports in PDF format.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <div>
+            © 2026 Asclepius FairAI
+        </div>
+
+        <div>
+            AI Powered Healthcare Bias and Fairness Analysis System
+        </div>
+
+    </footer>
+
+</div>

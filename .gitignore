@@ -1,0 +1,9 @@
+﻿__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+outputs/*.db
+outputs/test_history.db
+outputs/reports/*.pdf
+.streamlit/secrets.toml
